@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI/ML Experiment Similarity Search</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: rgba(255, 255, 255, 0.06);
+        --card2: rgba(255, 255, 255, 0.09);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.65);
+        --border: rgba(255, 255, 255, 0.14);
+        --accent: #7c5cff;
+        --accent2: #24d18f;
+        --danger: #ff5471;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        --radius: 18px;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: var(--sans);
+        color: var(--text);
+        background: radial-gradient(1200px 600px at 10% 0%, rgba(124, 92, 255, 0.25), transparent 60%),
+          radial-gradient(900px 500px at 90% 10%, rgba(36, 209, 143, 0.18), transparent 55%),
+          radial-gradient(900px 600px at 60% 100%, rgba(255, 84, 113, 0.14), transparent 60%),
+          var(--bg);
+        min-height: 100vh;
+        padding: 28px 16px 60px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--card), rgba(255, 255, 255, 0.03));
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 22px;
+        backdrop-filter: blur(10px);
+      }
+      .header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+      .sub {
+        margin: 6px 0 0;
+        color: var(--muted);
+        line-height: 1.4;
+        font-size: 13px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 160px;
+        resize: vertical;
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 14px;
+        color: var(--text);
+        outline: none;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      textarea:focus {
+        border-color: rgba(124, 92, 255, 0.55);
+        box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.12);
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .counter {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .counter.bad {
+        color: var(--danger);
+      }
+      button {
+        appearance: none;
+        border: 1px solid rgba(124, 92, 255, 0.45);
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.95), rgba(124, 92, 255, 0.7));
+        color: white;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-weight: 650;
+        letter-spacing: 0.2px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .meta {
+        margin-top: 16px;
+        display: none;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: rgba(255, 255, 255, 0.85);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .error {
+        margin-top: 12px;
+        display: none;
+        background: rgba(255, 84, 113, 0.12);
+        border: 1px solid rgba(255, 84, 113, 0.35);
+        border-radius: 14px;
+        padding: 12px 12px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+      .results {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+      }
+      .result {
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, var(--card2), rgba(255, 255, 255, 0.03));
+        border-radius: 16px;
+        padding: 14px 14px;
+      }
+      .topline {
+        display: grid;
+        grid-template-columns: 130px 1fr auto;
+        gap: 12px;
+        align-items: start;
+      }
+      @media (max-width: 720px) {
+        .topline {
+          grid-template-columns: 1fr;
+        }
+      }
+      .scoreWrap {
+        display: grid;
+        gap: 6px;
+      }
+      .scoreLabel {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .bar {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        overflow: hidden;
+      }
+      .bar > div {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, rgba(36, 209, 143, 0.95), rgba(124, 92, 255, 0.95));
+      }
+      .title {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.25;
+      }
+      .authors {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12.5px;
+        line-height: 1.35;
+      }
+      .rightMeta {
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .links {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pill {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(0, 0, 0, 0.18);
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        font-size: 12px;
+      }
+      .pill:hover {
+        border-color: rgba(124, 92, 255, 0.5);
+      }
+      .snippet {
+        margin-top: 10px;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+        line-height: 1.45;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .smallnote {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.4;
+        display: none;
+      }
+      .smallnote code {
+        font-family: var(--mono);
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="header">
+          <div>
+            <h1>AI/ML Experiment Similarity Search</h1>
+            <p class="sub">
+              Paste an experiment idea (≤200 words). We’ll fan out to 5 free sources and rank the top 10 most similar
+              prior experiments using cosine similarity on Semantic Scholar embeddings.
+            </p>
+          </div>
+        </div>
+
+        <textarea id="prompt" placeholder="Example: I want to compare LoRA vs full finetuning for a 7B LLM on ..."></textarea>
+
+        <div class="row">
+          <div id="counter" class="counter">0 / 200 words</div>
+          <button id="submit" disabled>
+            <span>Search</span>
+          </button>
+        </div>
+
+        <div id="meta" class="meta">
+          <div class="spinner"></div>
+          <div>Searching 5 sources...</div>
+        </div>
+
+        <div id="error" class="error"></div>
+        <div id="smallnote" class="smallnote"></div>
+
+        <div id="results" class="results"></div>
+      </div>
+    </div>
+
+    <script>
+      const MAX_WORDS = 200;
+      const elPrompt = document.getElementById("prompt");
+      const elCounter = document.getElementById("counter");
+      const elSubmit = document.getElementById("submit");
+      const elMeta = document.getElementById("meta");
+      const elError = document.getElementById("error");
+      const elResults = document.getElementById("results");
+      const elSmallnote = document.getElementById("smallnote");
+
+      function wordCount(text) {
+        const t = (text || "").trim();
+        if (!t) return 0;
+        return t.split(/\s+/).filter(Boolean).length;
+      }
+
+      function updateCounter() {
+        const wc = wordCount(elPrompt.value);
+        elCounter.textContent = `${wc} / ${MAX_WORDS} words`;
+        elCounter.classList.toggle("bad", wc > MAX_WORDS);
+        elSubmit.disabled = wc === 0 || wc > MAX_WORDS;
+      }
+
+      function clearUI() {
+        elError.style.display = "none";
+        elError.textContent = "";
+        elSmallnote.style.display = "none";
+        elSmallnote.textContent = "";
+        elResults.innerHTML = "";
+      }
+
+      function setLoading(isLoading) {
+        elMeta.style.display = isLoading ? "flex" : "none";
+        elSubmit.disabled = isLoading || elSubmit.disabled;
+      }
+
+      function esc(s) {
+        return (s || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function pill(label, url) {
+        if (!url) return "";
+        return `<a class="pill" href="${esc(url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`;
+      }
+
+      function snippet(abstract) {
+        if (!abstract) return "";
+        return abstract.replace(/\s+/g, " ").trim();
+      }
+
+      function renderResults(results) {
+        if (!Array.isArray(results) || results.length === 0) {
+          elResults.innerHTML = `<div class="result">No results. Try different keywords.</div>`;
+          return;
+        }
+
+        const html = results
+          .map((r) => {
+            const sim = typeof r.similarity === "number" ? r.similarity : 0;
+            const pct = Math.max(0, Math.min(1, sim)) * 100;
+            const title = r.title || "(untitled)";
+            const authors = Array.isArray(r.authors) ? r.authors.join(", ") : "";
+            const year = r.year || "";
+            const venue = r.venue || "";
+            const right = [year, venue].filter(Boolean).join(", ");
+            const abs = snippet(r.abstract);
+
+            const links = [
+              pill("Semantic Scholar", r.links?.semanticScholar),
+              pill("arXiv", r.links?.arxiv),
+              pill("PDF", r.links?.pdf),
+              pill("PWC", r.links?.pwc),
+              pill("OpenReview", r.links?.openreview),
+              pill("HF (model)", r.links?.hfModels),
+              pill("HF (dataset)", r.links?.hfDatasets),
+            ].join("");
+
+            return `
+              <div class="result">
+                <div class="topline">
+                  <div class="scoreWrap">
+                    <div class="scoreLabel">score: ${sim.toFixed(3)} (0–1)</div>
+                    <div class="bar"><div style="width:${pct.toFixed(1)}%"></div></div>
+                  </div>
+                  <div>
+                    <div class="title">${esc(title)}</div>
+                    <div class="authors">${esc(authors)}</div>
+                  </div>
+                  <div class="rightMeta">${esc(right)}</div>
+                </div>
+                <div class="links">${links}</div>
+                <div class="snippet">${esc(abs)}</div>
+              </div>
+            `;
+          })
+          .join("");
+
+        elResults.innerHTML = html;
+      }
+
+      elPrompt.addEventListener("input", updateCounter);
+      updateCounter();
+
+      elSubmit.addEventListener("click", async () => {
+        clearUI();
+        const wc = wordCount(elPrompt.value);
+        if (wc === 0 || wc > MAX_WORDS) return;
+
+        setLoading(true);
+        try {
+          const res = await fetch("/search", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: elPrompt.value }),
+          });
+          const json = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            throw new Error(json?.error || `Request failed (${res.status})`);
+          }
+
+          const errs = json?.partialErrors || {};
+          const keys = Object.keys(errs || {});
+          if (keys.length) {
+            elSmallnote.style.display = "block";
+            elSmallnote.innerHTML =
+              `<div><strong>Partial results:</strong> some sources failed (best-effort).</div>` +
+              `<div style="margin-top:6px; font-family: var(--mono); font-size: 11px;">` +
+              keys.map((k) => `<div><code>${esc(k)}</code>: ${esc(String(errs[k]))}</div>`).join("") +
+              `</div>`;
+          }
+
+          renderResults(json?.results || []);
+        } catch (e) {
+          elError.style.display = "block";
+          elError.textContent = e?.message || String(e);
+        } finally {
+          setLoading(false);
+          updateCounter();
+        }
+      });
+    </script>
+  </body>
+</html>
+
