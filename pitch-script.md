@@ -6,15 +6,17 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 
 ## Beat 1 — The hook (0:00–0:15)
 
-> "Every AI/ML researcher has had this moment: you're about to start a new experiment, you spend a week setting it up, you run it — and only then do you find out four other teams already did the same thing last quarter. The fix isn't more papers. It's faster lookup."
+> "We built a held-out set of 50 manually-labeled experiment descriptions. On that set, the most relevant prior experiment lands in our top 3 results 84% of the time, in 3 seconds. Right now a researcher does that lookup by hand in 4 hours — if they bother at all. Most don't, and they re-run experiments that already exist."
 
 **On screen:** the one-pager, empty textarea, cursor blinking.
+
+> *Stat note: replace 50 / 84% with your actual eval numbers before stage. The shape of the sentence is what matters — number first, baseline second.*
 
 ---
 
 ## Beat 2 — What it is (0:15–0:30)
 
-> "This is a single page. You paste up to 200 words describing the experiment you want to run. You get back the 10 most similar prior experiments from the AI/ML literature, ranked, with similarity scores you can see — and direct links to arXiv, Papers with Code, OpenReview, and Hugging Face."
+> "This is a single page. You paste up to 200 words describing the experiment you want to run. We run the **five-source fan-out** — Semantic Scholar, arXiv, Papers with Code, OpenReview, Hugging Face, all in parallel — and you get back the 10 most similar prior experiments, ranked, with similarity scores you can see and direct links to every source."
 
 **On screen:** highlight the word counter ticking up as you paste.
 
@@ -26,7 +28,7 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 
 **Action:** paste the prepared 150-word prompt. Counter shows `147 / 200 words`. Click Search.
 
-> "Behind that button, we're hitting five sources in parallel — Semantic Scholar, arXiv, Papers with Code, OpenReview, Hugging Face. We pull SPECTER2 embeddings, score every candidate by cosine similarity to your query, and rank."
+> "Behind that button is the **five-source fan-out** — Semantic Scholar, arXiv, Papers with Code, OpenReview, Hugging Face. All concurrent. We pull SPECTER2 embeddings, score every candidate by cosine similarity to your query, and rank."
 
 **On screen:** loading state, "Searching 5 sources..." → results in ~3 seconds.
 
@@ -42,19 +44,19 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 
 **Action:** open dev tools, throttle one API to fail. Resubmit.
 
-> "OpenReview is down. We still return 10 results — just without OpenReview badges. One source down never breaks the whole request."
+> "OpenReview is down. We still return 10 results — just without OpenReview badges. One source down never breaks the whole request. And same input, same output — scores are deterministic, cached by query hash. Reproducible by default."
 
 ---
 
-## Beat 5 — Why this, why now (1:25–1:40)
+## Beat 5 — Where this slots in (1:25–1:40)
 
-> "No database. No accounts. No history stored. Stateless by design — your queries are private, and the entire app fits on a free Vercel tier. We're not building a platform. We're building the bookmarks-bar tool every ML researcher should have already had."
+> "Here's where this lives. Before a researcher commits a thousand-dollar Litmus CRO run — or a week of GPU time — they paste their hypothesis here. If compound X inhibiting enzyme Y has already been run with IC50 of 2.4 micromolar, they should know *before* they pay for the assay. The five-source fan-out is the validation layer that closes the gap between 'I have an idea' and 'I'm running an experiment.' We expose an MCP endpoint, so the Litmus agent can call us directly. Apache 2.0, open data, stateless — your queries are private and the whole thing fits on a free Vercel tier."
 
 ---
 
 ## Beat 6 — The close (1:40–1:50)
 
-> "Paste, rank, click. That's the whole product. The first thirty seconds of every literature review, compressed into three. Try it: [URL]."
+> "Paste, rank, click. The five-source fan-out, in three seconds. Apache 2.0, open data, MCP endpoint live. We built this in 20 hours and it's running right now at [URL]. Try it — paste anything."
 
 **On screen:** URL on the closing slide. Cursor back in the textarea, ready for judges to type.
 
@@ -62,8 +64,11 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 
 ## Q&A prep
 
+**"Where does this fit with Litmus?"**
+> Pre-Litmus. Litmus runs the experiment; we tell you whether you should. Same architecture lifts to wet-lab v1.1 — different source bundle (PubMed, bioRxiv, ChEMBL), same five-source fan-out, same MCP shape. v2 we wire a "submit closest gap to Litmus" button directly in the results panel.
+
 **"Why not a database / search index?"**
-> Stateless is the feature. We get freshness for free — every query hits live APIs, so the moment a paper lands on arXiv, it's rankable. A pre-built index goes stale the day you ship it.
+> Stateless is the feature. We get freshness for free — every query hits live APIs, so the moment a paper lands on arXiv, it's rankable. A pre-built index goes stale the day you ship it. And stateless means deterministic — same input, same output, same cache key. Anyone can re-run our eval set and get our numbers.
 
 **"How is this different from Semantic Scholar's own search?"**
 > S2's UI ranks by keyword + citation count. We rank by SPECTER2 embedding similarity to your full description, and we fuse four other sources S2 doesn't cover — Papers with Code experiments, OpenReview discussions, HF models. The fusion is the product.
@@ -87,9 +92,14 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 - [ ] Backup screen recording of the demo in case live wifi fails
 - [ ] URL on closing slide is the live, deployed one — not localhost
 - [ ] Practiced twice end-to-end with a stopwatch
+- [ ] **Eval numbers locked.** Whatever you say in Beat 1 (e.g. "84% top-3 on 50 examples") matches the actual `/eval` script output. Re-run it 30 min before stage.
+- [ ] **MCP manifest reachable.** `GET /mcp/manifest.json` returns 200 — judges may check.
+- [ ] **Repo is public.** GitHub link in README + closing slide. Apache 2.0 LICENSE file present.
+- [ ] **Named term used 3+ times.** "Five-source fan-out" appears in Beats 2, 3, 5, and 6.
 
 ## Cuts if you're over time
 
-- Drop Beat 4 (honest-math + graceful-degradation demo) → saves ~15 s, biggest cut
+- Drop Beat 4 (honest-math + graceful-degradation demo) → saves ~15 s, biggest cut. **Keep the determinism line and graft it onto Beat 5** ("...deterministic, MCP-callable, Apache 2.0...") — losing reproducibility entirely costs more than losing the throttle stunt.
 - Drop Q&A-prep "what's next" answer → keep it to one sentence
 - Skip the arXiv click-through in Beat 3
+- **Never cut:** the Beat 1 number, the Litmus framing in Beat 5, or the "running right now" line in Beat 6. Those three carry the panel.
