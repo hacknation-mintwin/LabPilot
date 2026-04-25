@@ -250,6 +250,401 @@
         font-family: var(--mono);
         font-size: 11px;
       }
+
+      /* ===== Experiment plan ===== */
+      .plan-cta {
+        margin-top: 18px;
+        display: none;
+      }
+      .plan-cta button.secondary {
+        background: linear-gradient(180deg, rgba(36, 209, 143, 0.95), rgba(36, 209, 143, 0.7));
+        border-color: rgba(36, 209, 143, 0.55);
+      }
+      #planCard {
+        display: none;
+        margin-top: 18px;
+      }
+      .plan-summary {
+        display: grid;
+        gap: 14px;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      @media (max-width: 720px) {
+        .kpis { grid-template-columns: repeat(2, 1fr); }
+      }
+      .kpi {
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: grid;
+        gap: 4px;
+      }
+      .kpi .lbl {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-family: var(--mono);
+      }
+      .kpi .val {
+        font-size: 20px;
+        font-weight: 650;
+      }
+      .plan-summary-text {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 13.5px;
+        line-height: 1.5;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .tabbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+        padding: 4px;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+      }
+      .tab {
+        appearance: none;
+        background: transparent;
+        border: 1px solid transparent;
+        color: var(--muted);
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .tab:hover { color: var(--text); }
+      .tab.active {
+        background: rgba(124, 92, 255, 0.18);
+        border-color: rgba(124, 92, 255, 0.45);
+        color: var(--text);
+      }
+      .tabpane {
+        display: none;
+        margin-top: 14px;
+      }
+      .tabpane.active { display: block; }
+      .pane-empty {
+        color: var(--muted);
+        font-size: 13px;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      /* Protocol stepper */
+      .step {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, var(--card2), rgba(255, 255, 255, 0.03));
+        border-radius: 14px;
+        margin-bottom: 10px;
+      }
+      .step-num {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.95), rgba(124, 92, 255, 0.6));
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+      }
+      .step-head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .step-title {
+        font-size: 14.5px;
+        font-weight: 650;
+        margin: 0;
+      }
+      .step-dur {
+        font-family: var(--mono);
+        font-size: 11.5px;
+        color: var(--muted);
+        background: rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--border);
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
+      .step-source {
+        margin-left: auto;
+        font-size: 11.5px;
+      }
+      .step-source a {
+        color: rgba(124, 92, 255, 0.95);
+        text-decoration: none;
+      }
+      .step-source a:hover { text-decoration: underline; }
+      .step-instr {
+        margin-top: 8px;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .step-tags {
+        margin-top: 8px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .chip {
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.25);
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+      }
+      .chip.equipment {
+        background: rgba(36, 209, 143, 0.12);
+        border-color: rgba(36, 209, 143, 0.4);
+      }
+
+      /* Materials table */
+      .mtable-wrap { overflow-x: auto; }
+      table.mtable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      table.mtable th, table.mtable td {
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+      }
+      table.mtable th {
+        font-size: 11.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      table.mtable td.num {
+        font-family: var(--mono);
+        text-align: right;
+        white-space: nowrap;
+      }
+      table.mtable td a {
+        color: rgba(124, 92, 255, 0.95);
+        text-decoration: none;
+      }
+      table.mtable td a:hover { text-decoration: underline; }
+      .cat-badge {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        text-transform: uppercase;
+      }
+      .cat-reagent { background: rgba(124, 92, 255, 0.18); color: #d3c7ff; }
+      .cat-consumable { background: rgba(36, 209, 143, 0.18); color: #b6f0d3; }
+      .cat-equipment { background: rgba(255, 199, 0, 0.18); color: #ffe6a0; }
+      .cat-service { background: rgba(255, 84, 113, 0.18); color: #ffc1cb; }
+
+      /* Budget */
+      .budget-totals {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      @media (max-width: 720px) {
+        .budget-totals { grid-template-columns: 1fr; }
+      }
+      .budget-totals .kpi .val { font-size: 22px; }
+      .budget-bar-block { margin-top: 12px; }
+      .budget-bar-block h4 {
+        margin: 0 0 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: var(--muted);
+      }
+      .budget-bar {
+        display: flex;
+        height: 22px;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.25);
+      }
+      .budget-bar > div {
+        font-size: 10.5px;
+        color: white;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .budget-bar > div:nth-child(1) { background: rgba(124, 92, 255, 0.85); }
+      .budget-bar > div:nth-child(2) { background: rgba(36, 209, 143, 0.85); }
+      .budget-bar > div:nth-child(3) { background: rgba(255, 199, 0, 0.85); color: #2b1f00; }
+      .budget-bar > div:nth-child(4) { background: rgba(255, 84, 113, 0.85); }
+      .budget-bar > div:nth-child(5) { background: rgba(120, 200, 255, 0.85); color: #002a3d; }
+      .budget-bar > div:nth-child(6) { background: rgba(200, 200, 200, 0.85); color: #111; }
+      .budget-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 6px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* Gantt */
+      .gantt {
+        display: grid;
+        gap: 8px;
+        margin-top: 6px;
+      }
+      .gantt-row {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 12px;
+        align-items: center;
+      }
+      .gantt-name {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.85);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .gantt-track {
+        position: relative;
+        height: 26px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .gantt-bar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, rgba(36, 209, 143, 0.9), rgba(124, 92, 255, 0.9));
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: white;
+      }
+      .gantt-axis {
+        margin-left: 172px;
+        margin-top: 6px;
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* Validation + risks */
+      .vbox {
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 10px;
+      }
+      .vbox h4 {
+        margin: 0 0 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: var(--muted);
+      }
+      .vbox p, .vbox ul {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .vbox ul { padding-left: 18px; }
+      .vstats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .risk {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 12px;
+        align-items: start;
+        padding: 12px 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        margin-bottom: 8px;
+        background: rgba(0, 0, 0, 0.18);
+      }
+      .sev {
+        display: inline-block;
+        font-size: 11px;
+        font-family: var(--mono);
+        padding: 3px 10px;
+        border-radius: 999px;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .sev-low { background: rgba(36, 209, 143, 0.18); color: #b6f0d3; }
+      .sev-med { background: rgba(255, 199, 0, 0.18); color: #ffe6a0; }
+      .sev-high { background: rgba(255, 84, 113, 0.18); color: #ffc1cb; }
+      .risk-mit { color: var(--muted); margin-top: 4px; font-size: 12.5px; }
+
+      /* Exports + novelty */
+      .exports {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .exports button {
+        background: rgba(0, 0, 0, 0.25);
+        border-color: var(--border);
+      }
+      .novelty-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.25);
+      }
+      .novelty-not_found { color: #b6f0d3; border-color: rgba(36, 209, 143, 0.45); }
+      .novelty-similar_work_exists { color: #ffe6a0; border-color: rgba(255, 199, 0, 0.45); }
+      .novelty-exact_match_found { color: #ffc1cb; border-color: rgba(255, 84, 113, 0.45); }
     </style>
   </head>
   <body>
@@ -283,6 +678,58 @@
         <div id="smallnote" class="smallnote"></div>
 
         <div id="results" class="results"></div>
+
+        <div id="planCta" class="plan-cta">
+          <button id="generatePlan" class="secondary">
+            <span class="spinner" id="generateSpinner" style="display:none;"></span>
+            <span id="generateLabel">Generate experiment plan</span>
+            <span id="generateChevron" aria-hidden="true">▶</span>
+          </button>
+          <span id="noveltyPill" style="margin-left:10px;"></span>
+        </div>
+
+        <div id="planMeta" class="meta">
+          <div class="spinner"></div>
+          <div id="planStage">Drafting plan…</div>
+        </div>
+
+        <div id="planError" class="error"></div>
+        <div id="planNote" class="smallnote"></div>
+
+        <div id="planCard">
+          <div class="plan-summary">
+            <div class="kpis">
+              <div class="kpi"><span class="lbl">Total</span><span class="val" id="kpiTotal">£—</span></div>
+              <div class="kpi"><span class="lbl">Timeline</span><span class="val" id="kpiTimeline">— wks</span></div>
+              <div class="kpi"><span class="lbl">Materials</span><span class="val" id="kpiMaterials">—</span></div>
+              <div class="kpi"><span class="lbl">FTEs</span><span class="val" id="kpiFte">—</span></div>
+            </div>
+            <div class="plan-summary-text" id="planSummaryText"></div>
+          </div>
+
+          <div class="tabbar" role="tablist">
+            <button class="tab active" data-tab="protocol" role="tab">Protocol</button>
+            <button class="tab" data-tab="materials" role="tab">Materials</button>
+            <button class="tab" data-tab="budget" role="tab">Budget</button>
+            <button class="tab" data-tab="timeline" role="tab">Timeline</button>
+            <button class="tab" data-tab="validation" role="tab">Validation</button>
+            <button class="tab" data-tab="risks" role="tab">Risks</button>
+          </div>
+
+          <div class="tabpanes">
+            <div class="tabpane active" data-tab="protocol" id="paneProtocol"></div>
+            <div class="tabpane" data-tab="materials" id="paneMaterials"></div>
+            <div class="tabpane" data-tab="budget" id="paneBudget"></div>
+            <div class="tabpane" data-tab="timeline" id="paneTimeline"></div>
+            <div class="tabpane" data-tab="validation" id="paneValidation"></div>
+            <div class="tabpane" data-tab="risks" id="paneRisks"></div>
+          </div>
+
+          <div class="exports">
+            <button id="exportMd">Export Markdown</button>
+            <button id="exportJson">Export JSON</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -395,6 +842,7 @@
 
       elSubmit.addEventListener("click", async () => {
         clearUI();
+        clearPlanUI();
         const wc = wordCount(elPrompt.value);
         if (wc === 0 || wc > MAX_WORDS) return;
 
@@ -421,13 +869,505 @@
               `</div>`;
           }
 
-          renderResults(json?.results || []);
+          const results = json?.results || [];
+          renderResults(results);
+
+          // Cache top-3 QC refs for plan grounding & expose CTA.
+          state.lastPrompt = elPrompt.value;
+          state.qcRefs = results.slice(0, 3);
+          state.novelty = computeNoveltySignal(results);
+          if (state.lastPrompt) {
+            elPlanCta.style.display = "block";
+            renderNoveltyPill(state.novelty);
+          }
         } catch (e) {
           elError.style.display = "block";
           elError.textContent = e?.message || String(e);
         } finally {
           setLoading(false);
           updateCounter();
+        }
+      });
+
+      // ===== Experiment plan =====
+      const state = { lastPrompt: "", qcRefs: [], plan: null, novelty: null };
+
+      const elPlanCta = document.getElementById("planCta");
+      const elGenerate = document.getElementById("generatePlan");
+      const elPlanMeta = document.getElementById("planMeta");
+      const elPlanStage = document.getElementById("planStage");
+      const elPlanError = document.getElementById("planError");
+      const elPlanNote = document.getElementById("planNote");
+      const elPlanCard = document.getElementById("planCard");
+      const elKpiTotal = document.getElementById("kpiTotal");
+      const elKpiTimeline = document.getElementById("kpiTimeline");
+      const elKpiMaterials = document.getElementById("kpiMaterials");
+      const elKpiFte = document.getElementById("kpiFte");
+      const elPlanSummaryText = document.getElementById("planSummaryText");
+      const elNoveltyPill = document.getElementById("noveltyPill");
+
+      function clearPlanUI() {
+        elPlanCta.style.display = "none";
+        elPlanCard.style.display = "none";
+        elPlanError.style.display = "none";
+        elPlanError.textContent = "";
+        elPlanNote.style.display = "none";
+        elPlanNote.innerHTML = "";
+        elPlanMeta.style.display = "none";
+        elNoveltyPill.innerHTML = "";
+        state.plan = null;
+        state.qcRefs = [];
+        state.novelty = null;
+      }
+
+      function computeNoveltySignal(results) {
+        if (!Array.isArray(results) || !results.length) return { signal: "not_found", references: [] };
+        const top = results[0]?.similarity || 0;
+        let signal = "not_found";
+        if (top >= 0.92) signal = "exact_match_found";
+        else if (top >= 0.78) signal = "similar_work_exists";
+        return { signal, references: results.slice(0, 3) };
+      }
+
+      function renderNoveltyPill(novelty) {
+        if (!novelty) { elNoveltyPill.innerHTML = ""; return; }
+        const labels = {
+          not_found: "novelty: not found",
+          similar_work_exists: "novelty: similar work exists",
+          exact_match_found: "novelty: exact match found",
+        };
+        const cls = `novelty-${novelty.signal}`;
+        elNoveltyPill.innerHTML = `<span class="novelty-pill ${cls}">${esc(labels[novelty.signal])}</span>`;
+      }
+
+      const elGenerateSpinner = document.getElementById("generateSpinner");
+      const elGenerateLabel = document.getElementById("generateLabel");
+      const elGenerateChevron = document.getElementById("generateChevron");
+
+      function setPlanLoading(isLoading, msg) {
+        elPlanMeta.style.display = isLoading ? "flex" : "none";
+        if (msg) elPlanStage.textContent = msg;
+        elGenerate.disabled = isLoading;
+        elSubmit.disabled = isLoading || wordCount(elPrompt.value) === 0 || wordCount(elPrompt.value) > MAX_WORDS;
+        elGenerateSpinner.style.display = isLoading ? "inline-block" : "none";
+        elGenerateChevron.style.display = isLoading ? "none" : "inline";
+        elGenerateLabel.textContent = isLoading ? "Generating plan…" : "Generate experiment plan";
+      }
+
+      function gbp(n) {
+        const v = Number(n);
+        if (!Number.isFinite(v)) return "£—";
+        return "£" + v.toLocaleString("en-GB", { maximumFractionDigits: 0 });
+      }
+
+      function setActiveTab(name) {
+        document.querySelectorAll(".tab").forEach((t) => {
+          t.classList.toggle("active", t.dataset.tab === name);
+        });
+        document.querySelectorAll(".tabpane").forEach((p) => {
+          p.classList.toggle("active", p.dataset.tab === name);
+        });
+      }
+      document.querySelectorAll(".tab").forEach((t) => {
+        t.addEventListener("click", () => setActiveTab(t.dataset.tab));
+      });
+
+      function renderProtocol(plan) {
+        const steps = Array.isArray(plan.protocol) ? plan.protocol : [];
+        const matNames = new Map((plan.materials || []).map((m) => [m.id, m.name]));
+        if (!steps.length) return `<div class="pane-empty">No protocol steps were generated.</div>`;
+        return steps
+          .map((s, i) => {
+            const reagents = (s.reagents || [])
+              .map((id) => `<span class="chip" title="${esc(id)}">${esc(matNames.get(id) || id)}</span>`)
+              .join("");
+            const equipment = (s.equipment || [])
+              .map((e) => `<span class="chip equipment">${esc(e)}</span>`)
+              .join("");
+            const src = s.source?.url
+              ? `<span class="step-source"><a href="${esc(s.source.url)}" target="_blank" rel="noreferrer">${esc(s.source.name || "source")} ↗</a></span>`
+              : "";
+            return `
+              <div class="step">
+                <div class="step-num">${i + 1}</div>
+                <div>
+                  <div class="step-head">
+                    <h3 class="step-title">${esc(s.title || "Step")}</h3>
+                    ${s.duration_hours ? `<span class="step-dur">${esc(String(s.duration_hours))} h</span>` : ""}
+                    ${src}
+                  </div>
+                  <div class="step-instr">${esc(s.instructions || "")}</div>
+                  ${(reagents || equipment) ? `<div class="step-tags">${reagents}${equipment}</div>` : ""}
+                </div>
+              </div>`;
+          })
+          .join("");
+      }
+
+      function renderMaterials(plan) {
+        const mats = Array.isArray(plan.materials) ? plan.materials : [];
+        if (!mats.length) return `<div class="pane-empty">No materials were generated.</div>`;
+        const order = ["reagent", "consumable", "equipment", "service"];
+        const sorted = [...mats].sort(
+          (a, b) => order.indexOf(a.category) - order.indexOf(b.category) || a.name?.localeCompare(b.name || "") || 0,
+        );
+        const subtotalsByCat = {};
+        for (const m of sorted) {
+          subtotalsByCat[m.category] = (subtotalsByCat[m.category] || 0) + (m.line_cost_gbp || 0);
+        }
+        const rows = sorted
+          .map((m) => {
+            const url = m.url || (m.catalog_number ? `https://www.google.com/search?q=${encodeURIComponent((m.supplier || "") + " " + m.catalog_number)}` : "");
+            const cat = order.includes(m.category) ? m.category : "consumable";
+            const nameCell = url
+              ? `<a href="${esc(url)}" target="_blank" rel="noreferrer">${esc(m.name || "—")}</a>`
+              : esc(m.name || "—");
+            return `
+              <tr>
+                <td><span class="cat-badge cat-${cat}">${cat}</span></td>
+                <td>${nameCell}</td>
+                <td>${esc(m.supplier || "—")}</td>
+                <td><code>${esc(m.catalog_number || "—")}</code></td>
+                <td>${esc(m.pack_size || "—")}</td>
+                <td class="num">${esc(String(m.quantity ?? "—"))}</td>
+                <td class="num">${gbp(m.unit_cost_gbp)}</td>
+                <td class="num"><strong>${gbp(m.line_cost_gbp)}</strong></td>
+              </tr>`;
+          })
+          .join("");
+        const totalLine = mats.reduce((a, m) => a + (m.line_cost_gbp || 0), 0);
+        const subFooter = order
+          .filter((c) => subtotalsByCat[c])
+          .map((c) => `${c}: <strong>${gbp(subtotalsByCat[c])}</strong>`)
+          .join(" · ");
+        return `
+          <div class="mtable-wrap">
+            <table class="mtable">
+              <thead>
+                <tr>
+                  <th>Cat</th>
+                  <th>Name</th>
+                  <th>Supplier</th>
+                  <th>Catalog #</th>
+                  <th>Pack</th>
+                  <th>Qty</th>
+                  <th>Unit £</th>
+                  <th>Line £</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="7" style="text-align:right; color: var(--muted); font-size: 12px;">Materials subtotal</td>
+                  <td class="num"><strong>${gbp(totalLine)}</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="budget-legend" style="margin-top:10px;">${subFooter}</div>`;
+      }
+
+      function renderBudgetBar(catMap) {
+        const entries = Object.entries(catMap || {}).filter(([, v]) => Number(v) > 0);
+        const total = entries.reduce((a, [, v]) => a + Number(v), 0) || 1;
+        const segs = entries
+          .map(([k, v]) => {
+            const pct = (Number(v) / total) * 100;
+            return `<div style="width:${pct.toFixed(2)}%" title="${esc(k)}: ${gbp(v)}">${esc(k)} ${gbp(v)}</div>`;
+          })
+          .join("");
+        const legend = entries.map(([k, v]) => `<span>${esc(k)}: <strong>${gbp(v)}</strong></span>`).join(" · ");
+        return `<div class="budget-bar">${segs}</div><div class="budget-legend">${legend}</div>`;
+      }
+
+      function renderBudget(plan) {
+        const b = plan.budget || {};
+        return `
+          <div class="budget-totals">
+            <div class="kpi"><span class="lbl">Subtotal</span><span class="val">${gbp(b.subtotal)}</span></div>
+            <div class="kpi"><span class="lbl">Contingency (${b.contingency_pct ?? 15}%)</span><span class="val">${gbp(b.contingency)}</span></div>
+            <div class="kpi"><span class="lbl">Total</span><span class="val" style="color: rgba(36, 209, 143, 0.95);">${gbp(b.total)}</span></div>
+          </div>
+          <div class="budget-bar-block">
+            <h4>By category</h4>
+            ${renderBudgetBar(b.categories || {})}
+          </div>
+          <div class="budget-bar-block">
+            <h4>By phase</h4>
+            ${renderBudgetBar(b.phases || {})}
+          </div>
+          <div style="margin-top:14px; color: var(--muted); font-size: 12px;">
+            Labour computed as ${b.fte ?? 1} FTE × £${b.day_rate_gbp ?? 480}/day × ${plan.timeline?.total_weeks ?? 0} wks × 5 days.
+          </div>`;
+      }
+
+      function renderTimeline(plan) {
+        const tl = plan.timeline || {};
+        const phases = Array.isArray(tl.phases) ? tl.phases : [];
+        if (!phases.length) return `<div class="pane-empty">No timeline phases were generated.</div>`;
+        const total = Math.max(1, tl.total_weeks || 1);
+        const rows = phases
+          .map((p) => {
+            const left = (p.start_week / total) * 100;
+            const width = Math.max(2, ((p.end_week - p.start_week) / total) * 100);
+            return `
+              <div class="gantt-row">
+                <div class="gantt-name" title="${esc(p.name)}">${esc(p.name)}</div>
+                <div class="gantt-track">
+                  <div class="gantt-bar" style="left:${left.toFixed(2)}%; width:${width.toFixed(2)}%;">
+                    wk ${p.start_week}–${p.end_week} · ${p.duration_weeks}w
+                  </div>
+                </div>
+              </div>`;
+          })
+          .join("");
+        const cycle = tl.cycle_detected
+          ? `<div class="pane-empty" style="margin-bottom:10px; border-color: rgba(255,84,113,0.45); color: #ffc1cb;">Dependency cycle detected — phases laid out linearly.</div>`
+          : "";
+        return `
+          ${cycle}
+          <div class="gantt">${rows}</div>
+          <div class="gantt-axis"><span>week 0</span><span>week ${total}</span></div>`;
+      }
+
+      function renderValidation(plan) {
+        const v = plan.validation || {};
+        const successList = (v.success_criteria || []).map((s) => `<li>${esc(s)}</li>`).join("");
+        const failList = (v.failure_modes || []).map((s) => `<li>${esc(s)}</li>`).join("");
+        return `
+          <div class="vbox">
+            <h4>Primary endpoint</h4>
+            <p>${esc(v.primary_endpoint || "—")}</p>
+            <div class="vstats">
+              <span class="chip">test: ${esc(v.statistical_test || "—")}</span>
+              <span class="chip">n = ${esc(String(v.sample_size ?? "—"))}</span>
+              <span class="chip">α = ${esc(String(v.alpha ?? 0.05))}</span>
+              <span class="chip">power = ${esc(String(v.power ?? 0.8))}</span>
+            </div>
+          </div>
+          ${successList ? `<div class="vbox"><h4>Success criteria</h4><ul>${successList}</ul></div>` : ""}
+          ${failList ? `<div class="vbox"><h4>Failure modes</h4><ul>${failList}</ul></div>` : ""}`;
+      }
+
+      function renderRisks(plan) {
+        const risks = Array.isArray(plan.risks) ? plan.risks : [];
+        if (!risks.length) return `<div class="pane-empty">No risks listed.</div>`;
+        return risks
+          .map((r) => {
+            const sev = ["low", "med", "high"].includes(r.severity) ? r.severity : "med";
+            return `
+              <div class="risk">
+                <span class="sev sev-${sev}">${sev}</span>
+                <div>
+                  <div>${esc(r.risk || "")}</div>
+                  ${r.mitigation ? `<div class="risk-mit">Mitigation: ${esc(r.mitigation)}</div>` : ""}
+                </div>
+              </div>`;
+          })
+          .join("");
+      }
+
+      function renderPlan(plan) {
+        elKpiTotal.textContent = gbp(plan.budget?.total);
+        elKpiTimeline.textContent = `${plan.timeline?.total_weeks ?? "—"} wks`;
+        elKpiMaterials.textContent = String((plan.materials || []).length);
+        elKpiFte.textContent = String(plan.budget?.fte ?? "—");
+        elPlanSummaryText.textContent = plan.summary || "";
+
+        document.getElementById("paneProtocol").innerHTML = renderProtocol(plan);
+        document.getElementById("paneMaterials").innerHTML = renderMaterials(plan);
+        document.getElementById("paneBudget").innerHTML = renderBudget(plan);
+        document.getElementById("paneTimeline").innerHTML = renderTimeline(plan);
+        document.getElementById("paneValidation").innerHTML = renderValidation(plan);
+        document.getElementById("paneRisks").innerHTML = renderRisks(plan);
+
+        elPlanCard.style.display = "block";
+        setActiveTab("protocol");
+        elPlanCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      // Markdown export
+      function planToMarkdown(plan, prompt, novelty) {
+        const lines = [];
+        lines.push(`# Experiment Plan`);
+        lines.push("");
+        if (prompt) {
+          lines.push(`**Hypothesis**: ${prompt}`);
+          lines.push("");
+        }
+        if (novelty) {
+          const map = { not_found: "Not found", similar_work_exists: "Similar work exists", exact_match_found: "Exact match found" };
+          lines.push(`**Novelty signal**: ${map[novelty.signal] || novelty.signal}`);
+          if (novelty.references?.length) {
+            lines.push("");
+            lines.push("**Prior work**:");
+            for (const r of novelty.references) {
+              const url = r.links?.semanticScholar || r.links?.arxiv || "";
+              lines.push(`- ${r.title || ""}${r.year ? " (" + r.year + ")" : ""}${url ? " — " + url : ""}`);
+            }
+          }
+          lines.push("");
+        }
+        if (plan.summary) {
+          lines.push(`## Summary`);
+          lines.push("");
+          lines.push(plan.summary);
+          lines.push("");
+        }
+
+        const b = plan.budget || {};
+        lines.push(`## Budget`);
+        lines.push("");
+        lines.push(`- **Total**: ${gbp(b.total)} (subtotal ${gbp(b.subtotal)} + ${b.contingency_pct ?? 15}% contingency = ${gbp(b.contingency)})`);
+        lines.push(`- Labour: ${gbp(b.labour_subtotal)} (${b.fte} FTE × £${b.day_rate_gbp}/day × ${plan.timeline?.total_weeks ?? 0} wks)`);
+        lines.push(`- Materials subtotal: ${gbp(b.materials_subtotal)}`);
+        lines.push("");
+
+        lines.push(`## Timeline (${plan.timeline?.total_weeks ?? 0} weeks)`);
+        lines.push("");
+        for (const p of plan.timeline?.phases || []) {
+          const deps = p.depends_on?.length ? ` (after ${p.depends_on.join(", ")})` : "";
+          lines.push(`- **${p.name}**: weeks ${p.start_week}–${p.end_week} (${p.duration_weeks}w)${deps}`);
+        }
+        lines.push("");
+
+        lines.push(`## Protocol`);
+        lines.push("");
+        for (const [i, s] of (plan.protocol || []).entries()) {
+          lines.push(`### Step ${i + 1}. ${s.title || ""}`);
+          if (s.duration_hours) lines.push(`_Duration_: ${s.duration_hours} h`);
+          if (s.source?.url) lines.push(`_Source_: [${s.source.name || "source"}](${s.source.url})`);
+          lines.push("");
+          if (s.instructions) lines.push(s.instructions);
+          if (s.reagents?.length) lines.push(`- Reagents: ${s.reagents.join(", ")}`);
+          if (s.equipment?.length) lines.push(`- Equipment: ${s.equipment.join(", ")}`);
+          lines.push("");
+        }
+
+        lines.push(`## Materials`);
+        lines.push("");
+        lines.push(`| Cat | Name | Supplier | Catalog # | Pack | Qty | Unit £ | Line £ |`);
+        lines.push(`| --- | --- | --- | --- | --- | ---: | ---: | ---: |`);
+        for (const m of plan.materials || []) {
+          lines.push(
+            `| ${m.category || ""} | ${m.url ? `[${m.name || ""}](${m.url})` : (m.name || "")} | ${m.supplier || ""} | ${m.catalog_number || ""} | ${m.pack_size || ""} | ${m.quantity ?? ""} | ${m.unit_cost_gbp ?? ""} | ${m.line_cost_gbp ?? ""} |`,
+          );
+        }
+        lines.push("");
+
+        lines.push(`## Validation`);
+        lines.push("");
+        const v = plan.validation || {};
+        if (v.primary_endpoint) lines.push(`- **Primary endpoint**: ${v.primary_endpoint}`);
+        if (v.statistical_test) lines.push(`- **Test**: ${v.statistical_test}`);
+        lines.push(`- **Sample size**: n = ${v.sample_size ?? "—"} (α = ${v.alpha ?? 0.05}, power = ${v.power ?? 0.8})`);
+        if (v.success_criteria?.length) {
+          lines.push(`- **Success criteria**:`);
+          for (const c of v.success_criteria) lines.push(`  - ${c}`);
+        }
+        if (v.failure_modes?.length) {
+          lines.push(`- **Failure modes**:`);
+          for (const c of v.failure_modes) lines.push(`  - ${c}`);
+        }
+        lines.push("");
+
+        if (plan.risks?.length) {
+          lines.push(`## Risks`);
+          lines.push("");
+          for (const r of plan.risks) {
+            lines.push(`- **[${(r.severity || "med").toUpperCase()}]** ${r.risk}`);
+            if (r.mitigation) lines.push(`  - Mitigation: ${r.mitigation}`);
+          }
+          lines.push("");
+        }
+
+        if (plan.citations?.length) {
+          lines.push(`## Citations`);
+          lines.push("");
+          for (const c of plan.citations) {
+            lines.push(`- [${c.title || c.name || c.url}](${c.url})`);
+          }
+        }
+        return lines.join("\n");
+      }
+
+      function downloadFile(filename, content, mime) {
+        const blob = new Blob([content], { type: mime || "text/plain" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      }
+
+      document.getElementById("exportMd").addEventListener("click", () => {
+        if (!state.plan) return;
+        downloadFile("experiment-plan.md", planToMarkdown(state.plan, state.lastPrompt, state.novelty), "text/markdown");
+      });
+      document.getElementById("exportJson").addEventListener("click", () => {
+        if (!state.plan) return;
+        downloadFile("experiment-plan.json", JSON.stringify(state.plan, null, 2), "application/json");
+      });
+
+      const PLAN_STAGES = [
+        "Extracting experiment frame…",
+        "Searching protocols.io…",
+        "Drafting plan with grounded references…",
+        "Computing budget and timeline…",
+      ];
+      function rotatePlanStages() {
+        let i = 0;
+        elPlanStage.textContent = PLAN_STAGES[0];
+        return setInterval(() => {
+          i = (i + 1) % PLAN_STAGES.length;
+          elPlanStage.textContent = PLAN_STAGES[i];
+        }, 3000);
+      }
+
+      let planInFlight = false;
+      elGenerate.addEventListener("click", async () => {
+        if (planInFlight) return;
+        if (!state.lastPrompt) return;
+        planInFlight = true;
+        elPlanError.style.display = "none";
+        elPlanError.textContent = "";
+        elPlanNote.style.display = "none";
+        elPlanNote.innerHTML = "";
+        elPlanCard.style.display = "none";
+
+        setPlanLoading(true);
+        const stageTimer = rotatePlanStages();
+        try {
+          const res = await fetch("/plan", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: state.lastPrompt, qcReferences: state.qcRefs }),
+          });
+          const json = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(json?.error || `Request failed (${res.status})`);
+
+          state.plan = json.plan;
+          renderPlan(json.plan);
+
+          const errs = json?.partialErrors || {};
+          const keys = Object.keys(errs);
+          if (keys.length) {
+            elPlanNote.style.display = "block";
+            elPlanNote.innerHTML =
+              `<div><strong>Plan generated with notes:</strong></div>` +
+              `<div style="margin-top:6px; font-family: var(--mono); font-size: 11px;">` +
+              keys.map((k) => `<div><code>${esc(k)}</code>: ${esc(String(errs[k]))}</div>`).join("") +
+              `</div>`;
+          }
+        } catch (e) {
+          elPlanError.style.display = "block";
+          elPlanError.textContent = e?.message || String(e);
+        } finally {
+          clearInterval(stageTimer);
+          setPlanLoading(false);
+          planInFlight = false;
         }
       });
     </script>
