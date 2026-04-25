@@ -50,7 +50,7 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 
 ## Beat 5 — Where this slots in (1:25–1:40)
 
-> "Here's where this lives. Before a researcher commits a thousand-dollar Litmus CRO run — or a week of GPU time — they paste their hypothesis here. If compound X inhibiting enzyme Y has already been run with IC50 of 2.4 micromolar, they should know *before* they pay for the assay. The five-source fan-out is the validation layer that closes the gap between 'I have an idea' and 'I'm running an experiment.' We expose an MCP endpoint, so the Litmus agent can call us directly. Apache 2.0, open data, stateless — your queries are private and the whole thing fits on a free Vercel tier."
+> "Here's where this lives. Before a researcher — or an AI coding agent — kicks off a week of GPU time, they paste the experiment here. If 'fine-tune 7B on synthetic instruction data with curriculum ordering' is already a 0.91-score precedent, they should know *before* the run starts. This is the deployment layer Adam wrote about: AI scores 77% on olympiad problems but 25% on open research, because the pipelines between 'I have an idea' and 'I'm running an experiment' don't exist. The five-source fan-out *is* that pipeline. We expose an MCP endpoint, so any agent — Claude, ChatGPT, or a research orchestrator — can call us directly. Apache 2.0, open data, stateless — your queries are private and the whole thing fits on a free Vercel tier."
 
 ---
 
@@ -65,7 +65,7 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 ## Q&A prep
 
 **"Where does this fit with Litmus?"**
-> Pre-Litmus. Litmus runs the experiment; we tell you whether you should. Same architecture lifts to wet-lab v1.1 — different source bundle (PubMed, bioRxiv, ChEMBL), same five-source fan-out, same MCP shape. v2 we wire a "submit closest gap to Litmus" button directly in the results panel.
+> Honestly: not yet. Litmus is wet-lab and v1 is AI/ML-scoped, so today we don't sit in front of a Litmus CRO run — pasting "fine-tune a 7B model" doesn't help anyone planning an enzyme assay. v1.1 swaps the source bundle to PubMed, bioRxiv, ChEMBL, Reaxys-open — same five-source fan-out, same MCP shape — and *that's* the version Litmus's agent can call as a CRO pre-flight ("has compound X inhibiting enzyme Y already been run?"). v2 wires a "submit closest gap to Litmus" button directly in the results panel. Today the integration story is the MCP endpoint itself: any agent can call it, and the architecture is shaped so the wet-lab swap is a source-list change, not a rewrite.
 
 **"Why not a database / search index?"**
 > Stateless is the feature. We get freshness for free — every query hits live APIs, so the moment a paper lands on arXiv, it's rankable. A pre-built index goes stale the day you ship it. And stateless means deterministic — same input, same output, same cache key. Anyone can re-run our eval set and get our numbers.
@@ -102,4 +102,4 @@ A 90-second spoken pitch + live demo. Time-boxed, beat-by-beat. Practice it twic
 - Drop Beat 4 (honest-math + graceful-degradation demo) → saves ~15 s, biggest cut. **Keep the determinism line and graft it onto Beat 5** ("...deterministic, MCP-callable, Apache 2.0...") — losing reproducibility entirely costs more than losing the throttle stunt.
 - Drop Q&A-prep "what's next" answer → keep it to one sentence
 - Skip the arXiv click-through in Beat 3
-- **Never cut:** the Beat 1 number, the Litmus framing in Beat 5, or the "running right now" line in Beat 6. Those three carry the panel.
+- **Never cut:** the Beat 1 number, the 77→25 deployment-gap framing in Beat 5 (Adam's exact thesis, in his exact words), or the "running right now" line in Beat 6. Those three carry the panel.

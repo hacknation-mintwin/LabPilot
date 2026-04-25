@@ -2,6 +2,16 @@
 
 Generic AI app shell: text input → OpenRouter LLM → streamed response. Swap in domain logic when the challenge drops.
 
+## MCP Maintainer Automation
+
+This repo now includes a remote automation path for keeping an MCP server branch up to date:
+
+- Workflow: `.github/workflows/mcp-maintainer.yml`
+- Operator runbook: `.github/mcp-maintainer/README.md`
+- MCP server package: `mcp-server/`
+
+The workflow syncs `mcp-server` with `feature/experiment-similarity-onepager` (fallback: `main`), runs MCP tests, opens/updates PRs, and can trigger Cursor Cloud Agent repair via webhook.
+
 ## Setup
 
 ```bash
