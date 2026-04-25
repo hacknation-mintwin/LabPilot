@@ -1,46 +1,67 @@
-# AI App Skeleton
+# Similarity Search App
 
-Generic AI app shell: text input → OpenRouter LLM → streamed response. Swap in domain logic when the challenge drops.
+Similarity Search is a Next.js app for AI/ML experiment ideation workflows, plus an MCP server package that exposes a search tool to external assistants.
 
-## MCP Maintainer Automation
+## Repository Structure
 
-This repo now includes a remote automation path for keeping an MCP server branch up to date:
+- `app/` - Next.js frontend and API routes
+- `mcp-server/` - stdio MCP server implementation
+- `.github/workflows/mcp-maintainer.yml` - scheduled branch-maintenance workflow
+- `.github/mcp-maintainer/README.md` - runbook for the 24-hour maintainer campaign
 
-- Workflow: `.github/workflows/mcp-maintainer.yml`
-- Operator runbook: `.github/mcp-maintainer/README.md`
-- MCP server package: `mcp-server/`
-
-The workflow syncs `mcp-server` with `feature/experiment-similarity-onepager` (fallback: `main`), runs MCP tests, opens/updates PRs, and can trigger Cursor Cloud Agent repair via webhook.
-
-## Setup
+## Run the Web App
 
 ```bash
-pnpm install
+npm install
 cp .env.example .env.local
-# edit .env.local and set OPENROUTER_API_KEY
-pnpm dev
+# set OPENROUTER_API_KEY in .env.local
+npm run dev
 ```
 
-Open http://localhost:3000.
+Open `http://localhost:3000`.
 
-## Environment Variables
+## Environment Variables (Web App)
 
-| Var | Purpose |
-| --- | --- |
-| `OPENROUTER_API_KEY` | OpenRouter API key (required) |
-| `MODEL_NAME` | Model slug; defaults to `google/gemma-4-26b-a4b-it:free` |
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `OPENROUTER_API_KEY` | yes | API key for chat route calls |
+| `MODEL_NAME` | no | Model slug override (`DEFAULT_MODEL` is used otherwise) |
 
-## Deploy
+## Deploy the Web App
 
 ```bash
 vercel --prod
 ```
 
-Set `OPENROUTER_API_KEY` (and optionally `MODEL_NAME`) in the Vercel dashboard.
+Set environment variables in Vercel after deploy.
 
-## Where to change things
+## MCP Server
 
-- **System prompt** — [app/api/chat/route.ts](app/api/chat/route.ts) (search `SYSTEM_PROMPT`)
-- **Model** — `MODEL_NAME` env var, or the `DEFAULT_MODEL` constant
-- **App name** — [app/page.tsx](app/page.tsx) (search `APP_NAME`)
-- **File upload / second API call** — extend `app/page.tsx` and `app/api/chat/route.ts`
+The MCP server lives in `mcp-server/` and exposes:
+
+- Tool name: `search_similar_experiments`
+- Transport: stdio
+- Upstream dependency: `POST /search` endpoint provided by your similarity-search service
+
+Quick start:
+
+```bash
+cd mcp-server
+npm install
+npm test
+npm start
+```
+
+For client setup examples (Cursor, Claude Desktop, generic MCP clients), see `mcp-server/README.md`.
+
+## Automated MCP Branch Maintainer
+
+`mcp-maintainer.yml` keeps `mcp-server` synchronized and repairable:
+
+- Source branch preference: `feature/experiment-similarity-onepager`
+- Fallback source: `main`
+- Target branch: `mcp-server`
+- Verification: runs `npm --prefix ./mcp-server test`
+- Failure path: opens a repair request and can trigger Cursor Cloud Agent webhook
+
+To operate it, follow `.github/mcp-maintainer/README.md`.
