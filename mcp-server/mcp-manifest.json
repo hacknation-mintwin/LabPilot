@@ -1,0 +1,17 @@
+{
+  "name": "similarity-search-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server exposing similarity-search onepager results.",
+  "transport": {
+    "type": "stdio",
+    "command": "node",
+    "args": [
+      "src/index.js"
+    ],
+    "cwd": "."
+  },
+  "env": {
+    "SIMILARITY_SEARCH_BASE_URL": "http://localhost:3000",
+    "SIMILARITY_SEARCH_TIMEOUT_MS": "15000"
+  }
+}
