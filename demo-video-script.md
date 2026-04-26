@@ -1,86 +1,135 @@
-# Demo Video Script - Similarity Search Repo (Updated)
+# Demo Video Script - Similarity Search Repo (Evidence-First)
 
 Audience: judges, hackathon reviewers, product-minded engineers  
 Target length: 2:00-2:30  
-Goal: show the current two-step flow: similarity search -> experiment plan
+Goal: prove the two-step flow (`/search` -> `/plan`) with visible evidence
 
 Named feature term (use 3+ times): **Expert Preflight**
 
 ---
 
-## 0:00-0:20 - Hook
+## Before recording: lock real numbers
+
+Replace placeholders with measured values from one recorded run:
+- `[SEARCH_LATENCY_MS]` = time to `/search` response
+- `[PLAN_LATENCY_MS]` = time to `/plan` response
+- `[RESULT_COUNT]` = number of returned results (target: 10)
+- `[PARTIAL_ERROR_EXAMPLE]` = one real key from `partialErrors` (if demonstrated)
+- `[TOP3_RELEVANT_COUNT]` = how many of top-3 are truly on-prompt by your rubric
+- `[CONCEPT_COVERAGE]` = matched core concepts in top-3 (e.g., `7/9`)
+
+If you do not have measured values, remove the number claim from voiceover.
+
+Relevance rubric (define before recording, then show it):
+- Prompt has 3 core concept groups (example: model size/task, method, evaluation setup)
+- A result is "relevant" only if title+snippet matches at least 2 of 3 groups
+- Show one counterexample result and explain why it is excluded
+
+---
+
+## 0:00-0:18 - Hook
 
 Voiceover:
-> "Before teams spend a week on compute , they need one fast answer: has something close already been done, and what is the realistic execution plan? This app gives both in one run. We call it the **Expert Preflight**."
+> "Teams need evidence before they spend compute or lab effort. **Expert Preflight** gives two outputs in one flow: similar prior work, then a concrete execution plan."
 
-On screen:
-- Open `onepager/` app home (`http://localhost:3000`)
-- Cursor in prompt textarea
+On screen evidence:
+- Open `onepager` app (`http://localhost:3000`)
+- Cursor in textarea
 - Word counter visible (`0 / 200 words`)
 
 ---
 
-## 0:20-0:55 - Step 1: Similarity search
+## 0:18-0:55 - Step 1 proof: similarity search
 
 Voiceover:
-> "Step one of **Expert Preflight**: paste an experiment idea, hit Search, and the app fans out to five sources in parallel: Semantic Scholar, arXiv, Papers with Code, OpenReview, and Hugging Face."
+> "Step one of **Expert Preflight** sends one query across five sources in parallel: Semantic Scholar, arXiv, Papers with Code, OpenReview, and Hugging Face."
+>
+> "In this run, search returned `[RESULT_COUNT]` ranked results in `[SEARCH_LATENCY_MS] ms`, with explicit 0-1 similarity scores."
+>
+> "For evidence quality, top-3 relevance is `[TOP3_RELEVANT_COUNT]/3` by our rubric, and concept coverage is `[CONCEPT_COVERAGE]`."
 
-On screen:
-- Paste a prepared 120-170 word AI/ML experiment description
-- Counter updates live
-- Click `Search`
-- Loading state: "Searching 5 sources..."
-- Results list with visible 0-1 scores and source links
+On screen evidence:
+- Paste prepared 120-170 word AI/ML prompt
+- Show counter update, click `Search`
+- Show loading text: "Searching 5 sources..."
+- Show result cards with visible score labels and source links
+- Optional: show browser network panel timing for `/search`
+- Show a small "Prompt Concepts" side card with 3 concept groups
+- For each top-3 result, highlight exact matched words/phrases in title/snippet
+- Briefly show one lower-ranked/off-topic result and mark "excluded by rubric"
 
-Line to emphasize:
-> "Every result shows an explicit similarity score, rounded and visible. No hidden ranking."
+Avoid saying:
+- "Best" or "most accurate" unless you show an eval benchmark
 
 ---
 
-## 0:55-1:30 - Step 2: Build a realistic plan
+## 0:55-1:10 - Prompt-specific extraction proof
 
 Voiceover:
-> "Step two of **Expert Preflight**: generate a practical execution plan from the same query and retrieved context. The app returns protocol steps, materials, timeline, validation, and a deterministic budget."
+> "This is not just retrieval; it is prompt-specific extraction. We only carry forward references that stay aligned with the prompt concepts."
+>
+> "Here are the exact fields we extract for downstream planning: title, authors, year, source links, semantic matches, and similarity score."
 
-On screen:
-- Click the planning action in the UI
+On screen evidence:
+- Open one result JSON (or devtools response preview) and point to extracted fields
+- Show top-3 references selected for downstream stage (`qcRefs`) in UI/export
+- Confirm each selected reference has at least one direct concept match from the prompt card
+
+---
+
+## 1:10-1:35 - Step 2 proof: plan generation
+
+Voiceover:
+> "Step two of **Expert Preflight** builds a plan from the same query and retrieval context."
+>
+> "This run produced protocol, materials, timeline, and validation in `[PLAN_LATENCY_MS] ms`."
+>
+> "Budget and timeline totals are deterministic client-side calculations, not free-form model arithmetic."
+
+On screen evidence:
+- Trigger planning action
 - Show staged loading messages
-- Open plan tabs in order: `Protocol` -> `Materials` -> `Timeline` -> `Validation`
-- Show KPI row (budget, weeks, materials count)
+- Click tabs in order: `Protocol` -> `Materials` -> `Timeline` -> `Validation`
+- Hold on budget/timeline summary fields
 
-Line to emphasize:
-> "Budget and timeline totals are computed server-side deterministically, not hallucinated."
 
----
-
-## 1:30-1:55 - Reliability beat
-
-Voiceover:
-> "This stays robust in real usage: each source call has a timeout, failures become `partialErrors`, and one source being down does not kill the whole request."
-
-On screen:
-- Briefly show partial-errors banner state if available
-- Show that results/plan still render
-- Optional cutaway to server logs
 
 ---
 
-## 1:55-2:20 - MCP + close
+## 1:35-1:58 - Reliability proof
 
 Voiceover:
-> "And this is not only a UI. The repo ships an MCP server exposing `search_similar_experiments`, so assistants can run the same search flow as a tool. **Expert Preflight** is live, agent-ready, and open-source."
+> "When one source is degraded, the app still returns best-available output and exposes what failed through `partialErrors`, so teams always know what is covered and 
+never act on hidden gaps."
+>
+> "Here, we still get results while flagging `[PARTIAL_ERROR_EXAMPLE]`."
 
-On screen:
+On screen evidence:
+- Show partial-errors banner/message
+- Show result list still rendered
+- Optional: briefly show response JSON containing `partialErrors`
+
+---
+
+## 1:58-2:22 - MCP evidence + close
+
+Voiceover:
+> "This is also agent-callable. The MCP server exposes `search_similar_experiments`, which returns normalized JSON: `cached`, `partialErrors`, and `results`."
+>
+> "**Expert Preflight** is live, reproducible, and open-source at [URL]."
+
+On screen evidence:
 - Open `mcp-server/README.md`
-- Highlight tool name and `POST /search` contract
-- Closing slide: live URL + repo URL
+- Highlight tool name and `/search` contract
+- Closing slide with live URL + repo URL
 
 ---
 
 ## Recording Checklist
 
-- Warm start onepager server and run one test query before recording
-- Keep one polished prompt in clipboard (120-170 words)
-- Keep a fallback clip of the search+plan flow in case Wi-Fi is unstable
-- Ensure no secrets are visible on screen (`.env`, API keys)
-- If time is tight, cut the reliability beat but keep both **Expert Preflight** steps
+- Warm start server and run one full search+plan cycle before the take
+- Capture one network timing screenshot for `/search` and `/plan`
+- Prepare one relevance overlay slide (prompt concepts -> top-3 concept matches)
+- Keep one fallback clip of complete flow in case network is unstable
+- Ensure no secrets are visible (`.env`, API keys, headers)
+- Remove any unmeasured metric claims before final export
