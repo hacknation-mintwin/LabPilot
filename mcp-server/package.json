@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MCP server for the similarity-search onepager API.",
+  "description": "MCP server for the LabPilot onepager API.",
   "scripts": {
     "start": "node src/index.js",
     "test": "node --test"

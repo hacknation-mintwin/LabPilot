@@ -1,7 +1,7 @@
 {
   "name": "similarity-search-mcp-server",
   "version": "0.1.0",
-  "description": "MCP server exposing similarity-search onepager results.",
+  "description": "MCP server exposing LabPilot onepager results.",
   "transport": {
     "type": "stdio",
     "command": "node",

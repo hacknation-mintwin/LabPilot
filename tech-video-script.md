@@ -1,4 +1,4 @@
-# Technical Video Script - Similarity Search Repo (Updated)
+# Technical Video Script - LabPilot Repo (Updated)
 
 Audience: engineers, maintainers, technical judges  
 Target length: 4:30-6:30  
@@ -9,11 +9,11 @@ Goal: explain the current onepager + MCP + maintainer architecture
 ## 0:00-0:35 - Architecture at a glance
 
 Voiceover:
-> "Current architecture has three parts: onepager web app for interactive use, MCP server for agent integrations, and an automated branch maintainer workflow for keeping `mcp-server` healthy."
+> "Current architecture has two parts: onepager web app for interactive use and MCP server for agent integrations."
 
 On screen:
 - Show repo root
-- Point to `onepager/`, `mcp-server/`, and `.github/workflows/mcp-maintainer.yml`
+- Point to `onepager/` and `mcp-server/`
 - Diagram: UI -> `/search` + `/plan`; MCP -> `/search`
 
 ---

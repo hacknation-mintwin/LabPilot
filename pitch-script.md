@@ -1,4 +1,4 @@
-# Pitch Script — Experiment Similarity Search
+# Pitch Script — LabPilot
 
 90-second spoken pitch + live demo. Built around the current `onepager` flow (`/search` then `/plan`).
 
@@ -59,7 +59,7 @@ Use this phrase at least 3 times.
 
 ## Beat 6 — Close (1:35-1:50)
 
-> "Similarity Search gives teams **Expert Preflight** in one place: find what is already close, then plan what to run next. It’s live now, agent-ready, and running at [URL]."
+> "LabPilot gives teams **Expert Preflight** in one place: find what is already close, then plan what to run next. It’s live now, agent-ready, and running at [URL]."
 
 **On screen:** closing slide with URL + repo link.
 

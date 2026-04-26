@@ -2,7 +2,7 @@
   "name": "ai-ml-experiment-similarity-onepager",
   "version": "1.0.0",
   "private": true,
-  "description": "Single-page AI/ML experiment similarity search (Semantic Scholar spine + live fanout).",
+  "description": "Single-page LabPilot experience for AI/ML experiment matching (Semantic Scholar spine + live fanout).",
   "main": "server.js",
   "type": "module",
   "scripts": {

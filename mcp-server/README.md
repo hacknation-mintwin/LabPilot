@@ -1,9 +1,9 @@
-# similarity-search MCP server
+# LabPilot MCP server
 
 MCP stdio server that exposes one tool backed by the onepager API:
 
 - Tool: `search_similar_experiments`
-- Upstream endpoint: `POST /search` on the similarity-search onepager service
+- Upstream endpoint: `POST /search` on the LabPilot onepager service
 - Output: JSON payload with `results`, `partialErrors`, and `cached`
 
 ## Quick start

@@ -1,6 +1,6 @@
-# Similarity Search
+# LabPilot
 
-Similarity Search includes a one-page AI/ML experiment similarity demo, a Next.js app, and an MCP server package that exposes search to external assistants.
+LabPilot includes a one-page AI/ML experiment similarity demo, a Next.js app, and an MCP server package that exposes search to external assistants.
 
 ## Key Features
 
@@ -63,7 +63,7 @@ The MCP server lives in `mcp-server/` and exposes:
 
 - Tool name: `search_similar_experiments`
 - Transport: stdio
-- Upstream dependency: `POST /search` endpoint provided by your similarity-search service
+- Upstream dependency: `POST /search` endpoint provided by your LabPilot service
 
 Quick start:
 

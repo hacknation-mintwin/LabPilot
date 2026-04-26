@@ -9,7 +9,7 @@ import { createSimilaritySearchClient } from "./search-client.js";
 
 const TOOL_NAME = "search_similar_experiments";
 const TOOL_DESCRIPTION =
-  "Searches the similarity-search onepager backend and returns top similar AI/ML experiments with scores.";
+  "Searches the LabPilot onepager backend and returns top similar AI/ML experiments with scores.";
 
 function toTextContent(payload) {
   return {

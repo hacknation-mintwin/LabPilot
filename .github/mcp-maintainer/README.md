@@ -50,3 +50,53 @@ Either:
 
 - Clear `MCP_MAINTAINER_STARTED_AT`, or
 - Set it far enough in the past so window is elapsed.
+
+## Local fallback (no Cursor Cloud dependency)
+
+Use `scripts/mcp-maintainer-local.sh` when cloud repair is unavailable.
+
+### What it does
+
+- Fetches from `origin`
+- Uses an isolated git worktree under `.artifacts/local-maintainer/worktree` (does not touch your active working tree)
+- Chooses source branch (`feature/experiment-similarity-onepager`, fallback `main`)
+- Syncs into `mcp-server`
+- Runs `npm --prefix ./mcp-server test`
+- On failure, invokes a local Cursor repair hook if configured
+
+### Run once
+
+```bash
+RUN_ONCE=1 AUTO_PUSH=0 ./scripts/mcp-maintainer-local.sh
+```
+
+### Run periodically (every 10 minutes)
+
+```bash
+INTERVAL_SECONDS=600 AUTO_PUSH=0 ./scripts/mcp-maintainer-local.sh
+```
+
+If SSH fetch/push needs explicit host key config in your environment, prepend:
+
+```bash
+GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/path/to/known_hosts -o StrictHostKeyChecking=yes' \
+INTERVAL_SECONDS=600 AUTO_PUSH=0 ./scripts/mcp-maintainer-local.sh
+```
+
+### Enable automatic Cursor repair command
+
+Set `CURSOR_REPAIR_COMMAND` to any local command that should run when sync/tests fail.
+The script exports:
+
+- `CURSOR_REPAIR_REASON`
+- `CURSOR_REPAIR_SOURCE_BRANCH`
+- `CURSOR_REPAIR_TARGET_BRANCH`
+- `CURSOR_REPAIR_PROMPT_FILE`
+
+Example:
+
+```bash
+CURSOR_REPAIR_COMMAND='echo "repair needed: $CURSOR_REPAIR_REASON (see $CURSOR_REPAIR_PROMPT_FILE)"' \
+RUN_ONCE=1 \
+./scripts/mcp-maintainer-local.sh
+```

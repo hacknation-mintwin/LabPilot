@@ -1,4 +1,4 @@
-# AI/ML Experiment Similarity Search — One-Pager (v1)
+# LabPilot — One-Pager (v1)
 
 Single-page web app: paste an AI/ML experiment description (≤200 words) and get the top 10 most similar prior experiments with a **0–1 similarity score** plus best-effort links to sources.
 

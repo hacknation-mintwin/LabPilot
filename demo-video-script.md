@@ -1,4 +1,4 @@
-# Demo Video Script - Similarity Search Repo (Evidence-First)
+# Demo Video Script - LabPilot Repo (Evidence-First)
 
 Audience: judges, hackathon reviewers, product-minded engineers  
 Target length: 2:00-2:30  

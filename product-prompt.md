@@ -1,10 +1,14 @@
-BUILD: AI/ML Experiment Similarity Search — One-Pager
+BUILD: LabPilot — One-Pager
 
-GOAL
+1st GOAL (COMPLETED)
 Build a single-page web app where a researcher pastes a free-form description
 (<=200 words) of an experiment they want to run, and gets back the top 10 most
 similar prior experiments from the AI/ML literature, each with a 0-1 similarity
-score and links to the source.
+score and links to the source. 
+
+2nd GOAL
+Add the second step after the query. It should produce the realistic experiment plan
+
 
 STACK (free + open-source only)
 - Frontend: plain HTML + vanilla JS + CSS. No framework. One file: index.html.
