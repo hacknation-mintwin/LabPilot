@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # LabPilot
 
 LabPilot includes a one-page AI/ML experiment similarity demo, a Next.js app, and an MCP server package that exposes search to external assistants.
@@ -100,4 +99,3 @@ Copy `onepager/.env.example` to `onepager/.env` and set:
 - `GEMINI_API_KEY` (required)
 - `CONTACT_EMAIL` (recommended)
 - `S2_API_KEY` (optional but recommended)
->>>>>>> Stashed changes
