@@ -1,22 +1,37 @@
-# Similarity Search App
+# Similarity Search
 
-Similarity Search is a Next.js app for AI/ML experiment ideation workflows, plus an MCP server package that exposes a search tool to external assistants.
+Similarity Search includes a one-page AI/ML experiment similarity demo, a Next.js app, and an MCP server package that exposes search to external assistants.
 
 ## Key Features
 
 - **Prompt-to-experiment discovery**: quickly surface related AI/ML experiments to reduce ideation time.
+- **Onepager-first demo**: run a lightweight single-page interface with a simple Node/Express backend.
 - **Web app + MCP in one project**: use the UI directly or connect the same capability to assistants through MCP.
-- **Practical integration path**: includes API routes, environment setup, and deployment steps to go from local to production.
 - **Client-ready MCP server**: built for stdio workflows and easy setup with Cursor, Claude Desktop, and generic MCP clients.
 
 ## Repository Structure
 
 - `app/` - Next.js frontend and API routes
+- `onepager/` - single-page demo app (vanilla frontend + Node/Express backend)
 - `mcp-server/` - stdio MCP server implementation
 - `.github/workflows/mcp-maintainer.yml` - scheduled branch-maintenance workflow
 - `.github/mcp-maintainer/README.md` - runbook for the 24-hour maintainer campaign
 
-## Run the Web App
+## Run the Onepager (Recommended Quick Start)
+
+```bash
+cd onepager
+npm install
+cp .env.example .env
+# set CONTACT_EMAIL (recommended) and S2_API_KEY (optional)
+npm start
+```
+
+Open `http://localhost:3000`.
+
+See `onepager/README.md` for API details and constraints.
+
+## Run the Next.js Web App (Optional)
 
 ```bash
 npm install
@@ -27,7 +42,7 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Environment Variables (Web App)
+## Environment Variables (Next.js App)
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
