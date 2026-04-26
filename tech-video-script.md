@@ -63,12 +63,16 @@ On screen:
 - Back to `onepager/server.js`
 - Highlight:
   - `POST /plan`
-  - OpenRouter key guard
+  - provider-chain key guard (at least one configured key)
+  - provider priority list (Gemini -> Gemini Lite -> Groq -> Cerebras)
   - deterministic post-processing block
   - `partialErrors.sanity` handling
 
 Key line:
 > "Arithmetic is computed in code, not delegated to model output."
+
+Supporting line:
+> "If one model provider fails, the chain falls back automatically and still returns best-available planning output."
 
 ---
 

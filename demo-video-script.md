@@ -85,13 +85,14 @@ Voiceover:
 >
 > "This run produced protocol, materials, timeline, and validation in `[PLAN_LATENCY_MS] ms`."
 >
-> "Budget and timeline totals are deterministic client-side calculations, not free-form model arithmetic."
+> "Plan generation uses a provider fallback chain, and budget and timeline totals are deterministic server-side calculations, not free-form model arithmetic."
 
 On screen evidence:
 - Trigger planning action
 - Show staged loading messages
 - Click tabs in order: `Protocol` -> `Materials` -> `Timeline` -> `Validation`
 - Hold on budget/timeline summary fields
+- Optional: show a log line or UI note that confirms provider fallback when a primary provider fails
 
 
 

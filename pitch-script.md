@@ -51,7 +51,7 @@ Use this phrase at least 3 times.
 
 ## Beat 5 — Reliability + integration (1:20-1:35)
 
-> "This is built for real usage: one source can fail and we still return results via `partialErrors`, responses are cached by prompt hash, and we also expose MCP tool `search_similar_experiments` so assistants can call this directly."
+> "This is built for real usage: one source can fail and we still return results via `partialErrors`, plan generation uses a provider fallback chain, responses are cached by prompt hash, and we expose MCP tool `search_similar_experiments` so assistants can call this directly."
 
 **On screen:** partial-errors banner if available, then `mcp-server/README.md` tool section.
 
@@ -78,6 +78,9 @@ Use this phrase at least 3 times.
 
 **"How do agents use this?"**  
 > Through MCP tool `search_similar_experiments`, which validates input and returns normalized JSON (`cached`, `partialErrors`, `results`).
+
+**"What if one LLM provider is rate-limited?"**  
+> `/plan` uses an ordered provider chain (Gemini primary, then fallbacks), so one provider failure does not block the full planning flow.
 
 **"What is next?"**  
 > Expand source bundles by vertical and add richer planning/tooling while keeping the same tool contract.
