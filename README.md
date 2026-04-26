@@ -2,6 +2,13 @@
 
 Similarity Search is a Next.js app for AI/ML experiment ideation workflows, plus an MCP server package that exposes a search tool to external assistants.
 
+## Key Features
+
+- **Prompt-to-experiment discovery**: quickly surface related AI/ML experiments to reduce ideation time.
+- **Web app + MCP in one project**: use the UI directly or connect the same capability to assistants through MCP.
+- **Practical integration path**: includes API routes, environment setup, and deployment steps to go from local to production.
+- **Client-ready MCP server**: built for stdio workflows and easy setup with Cursor, Claude Desktop, and generic MCP clients.
+
 ## Repository Structure
 
 - `app/` - Next.js frontend and API routes
@@ -54,14 +61,3 @@ npm start
 
 For client setup examples (Cursor, Claude Desktop, generic MCP clients), see `mcp-server/README.md`.
 
-## Automated MCP Branch Maintainer
-
-`mcp-maintainer.yml` keeps `mcp-server` synchronized and repairable:
-
-- Source branch preference: `feature/experiment-similarity-onepager`
-- Fallback source: `main`
-- Target branch: `mcp-server`
-- Verification: runs `npm --prefix ./mcp-server test`
-- Failure path: opens a repair request and can trigger Cursor Cloud Agent webhook
-
-To operate it, follow `.github/mcp-maintainer/README.md`.
