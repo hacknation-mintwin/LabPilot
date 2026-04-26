@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # LabPilot
 
 LabPilot includes a one-page AI/ML experiment similarity demo, a Next.js app, and an MCP server package that exposes search to external assistants.
@@ -77,27 +76,3 @@ npm start
 
 For client setup examples (Cursor, Claude Desktop, generic MCP clients), see `mcp-server/README.md`.
 
-=======
-# Similarity Search (Onepager-only)
-
-This repo now runs only the `onepager` app.
-
-## Run
-
-```bash
-npm install
-npm run dev
-```
-
-This starts the onepager server via the root script wrapper.
-
-Open `http://localhost:3000`.
-
-## Environment
-
-Copy `onepager/.env.example` to `onepager/.env` and set:
-
-- `GEMINI_API_KEY` (required)
-- `CONTACT_EMAIL` (recommended)
-- `S2_API_KEY` (optional but recommended)
->>>>>>> Stashed changes

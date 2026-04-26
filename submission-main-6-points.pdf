@@ -1,0 +1,76 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1280 >>
+stream
+BT
+/F1 12 Tf
+72 790 Td
+(LabPilot Similarity Search ? Main 6 Points) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(1\) Problem) Tj
+0 -16 Td
+(Teams waste time and budget searching scattered sources, with no direct bridge from evidence to execution planning.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(2\) Audience) Tj
+0 -16 Td
+(AI/ML engineers, applied researchers, and product experiment teams under tight delivery and resource constraints.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(3\) Core Solution \(Expert Preflight\)) Tj
+0 -16 Td
+(One flow runs five-source similarity search with transparent 0-1 scores, then generates a practical execution plan.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(4\) Differentiation) Tj
+0 -16 Td
+(This combines scored multi-source retrieval and structured planning from the same prompt context, not just link lists.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(5\) Implementation) Tj
+0 -16 Td
+(Node.js + Express onepager with /search and /plan, MCP tool integration, timeout-safe fanout, and partialErrors handling.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(6\) Reliability & Impact) Tj
+0 -16 Td
+(Best-available outputs continue during partial upstream failures; prompt-hash caching and deterministic post-processing improve consistency.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(GitHub: https://github.com/hacknation-mintwin/similarity-search) Tj
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1643
+%%EOF
