@@ -49,7 +49,8 @@ Voiceover:
 > "For evidence quality, top-3 relevance is `[TOP3_RELEVANT_COUNT]/3` by our rubric, and concept coverage is `[CONCEPT_COVERAGE]`."
 
 On screen evidence:
-- Paste prepared 120-170 word AI/ML prompt
+- Paste prepared 120-170 word prompt:
+I want to run an experiment to improve onboarding completion in a productivity app used by remote teams. Current completion is 42% within the first session, and many users drop off before creating their first project. I want to test a guided onboarding flow with three changes: (1) role-based setup questions, (2) an interactive checklist with progress feedback, and (3) contextual tips triggered by inactivity. The primary metric is onboarding completion within one session. Secondary metrics are time-to-first-project, week-1 retention, and support tickets related to setup confusion. I need a practical plan for experiment design, sample size assumptions, implementation steps, instrumentation events, success thresholds, and common failure risks. I also want recommendations for a realistic rollout strategy, guardrail metrics, and how to validate whether results generalize across team sizes and industries.
 - Show counter update, click `Search`
 - Show loading text: "Searching 5 sources..."
 - Show result cards with visible score labels and source links

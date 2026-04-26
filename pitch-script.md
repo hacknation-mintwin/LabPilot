@@ -67,8 +67,8 @@ Use this phrase at least 3 times.
 
 ## Q&A Prep
 
-**"How is this different from a normal paper search?"**  
-> We rank by semantic similarity with explicit 0-1 scores and fuse multiple AI/ML sources in one query, then continue into plan generation. Standard search stops at links.
+**"How is this different from a normal search?"**  
+> We rank by semantic similarity with explicit 0-1 scores and fuse multiple sources in one query, then continue into plan generation. Standard search stops at links.
 
 **"What happens if one source is down?"**  
 > Requests are timeout-bounded per source. Failures are captured in `partialErrors`, and we still return best-available results instead of failing the request.
