@@ -2,14 +2,14 @@
 
 90-second spoken pitch + live demo. Built around the current `onepager` flow (`/search` then `/plan`).
 
-Named feature term: **Two-Step Preflight**  
+Named feature term: **Expert Preflight**  
 Use this phrase at least 3 times.
 
 ---
 
 ## Beat 1 — Hook (0:00-0:15)
 
-> "Teams spend days on experiments that already have close precedents. We built **Two-Step Preflight** so they can check similarity and execution feasibility before spending compute or lab budget."
+> "Teams spend days on experiments that already have close precedents. We built **Expert Preflight** so they can check similarity and execution feasibility before spending compute or lab budget."
 
 **On screen:** onepager home, empty textarea, visible word counter.
 
@@ -25,7 +25,7 @@ Use this phrase at least 3 times.
 
 ## Beat 3 — Live demo step one (0:30-1:00)
 
-> "Watch **Two-Step Preflight** in action. I’ll paste a real experiment description and hit Search."
+> "Watch **Expert Preflight** in action. I’ll paste a real experiment description and hit Search."
 
 **Action:** paste prepared 130-170 word prompt, click Search.
 
@@ -39,7 +39,7 @@ Use this phrase at least 3 times.
 
 ## Beat 4 — Live demo step two (1:00-1:20)
 
-> "Now step two of **Two-Step Preflight**: generate the execution plan from the same prompt plus retrieved context."
+> "Now step two of **Expert Preflight**: generate the execution plan from the same prompt plus retrieved context."
 
 **Action:** trigger plan generation.
 
@@ -59,7 +59,7 @@ Use this phrase at least 3 times.
 
 ## Beat 6 — Close (1:35-1:50)
 
-> "Similarity Search gives teams **Two-Step Preflight** in one place: find what is already close, then plan what to run next. It’s live now, agent-ready, and running at [URL]."
+> "Similarity Search gives teams **Expert Preflight** in one place: find what is already close, then plan what to run next. It’s live now, agent-ready, and running at [URL]."
 
 **On screen:** closing slide with URL + repo link.
 
@@ -92,7 +92,7 @@ Use this phrase at least 3 times.
 - [ ] Verify `npm --prefix mcp-server test` passes
 - [ ] Keep a fallback screen recording in case of unstable network
 - [ ] URL on closing slide is live deploy, not localhost
-- [ ] Named term appears 3+ times: **Two-Step Preflight**
+- [ ] Named term appears 3+ times: **Expert Preflight**
 
 ## Cuts if over time
 

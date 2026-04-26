@@ -4,14 +4,14 @@ Audience: judges, hackathon reviewers, product-minded engineers
 Target length: 2:00-2:30  
 Goal: show the current two-step flow: similarity search -> experiment plan
 
-Named feature term (use 3+ times): **Two-Step Preflight**
+Named feature term (use 3+ times): **Expert Preflight**
 
 ---
 
 ## 0:00-0:20 - Hook
 
 Voiceover:
-> "Before teams spend a week on compute or wet-lab prep, they need one fast answer: has something close already been done, and what is the realistic execution plan? This app gives both in one run. We call it the **Two-Step Preflight**."
+> "Before teams spend a week on compute , they need one fast answer: has something close already been done, and what is the realistic execution plan? This app gives both in one run. We call it the **Expert Preflight**."
 
 On screen:
 - Open `onepager/` app home (`http://localhost:3000`)
@@ -23,7 +23,7 @@ On screen:
 ## 0:20-0:55 - Step 1: Similarity search
 
 Voiceover:
-> "Step one of **Two-Step Preflight**: paste an experiment idea, hit Search, and the app fans out to five sources in parallel: Semantic Scholar, arXiv, Papers with Code, OpenReview, and Hugging Face."
+> "Step one of **Expert Preflight**: paste an experiment idea, hit Search, and the app fans out to five sources in parallel: Semantic Scholar, arXiv, Papers with Code, OpenReview, and Hugging Face."
 
 On screen:
 - Paste a prepared 120-170 word AI/ML experiment description
@@ -40,7 +40,7 @@ Line to emphasize:
 ## 0:55-1:30 - Step 2: Build a realistic plan
 
 Voiceover:
-> "Step two of **Two-Step Preflight**: generate a practical execution plan from the same query and retrieved context. The app returns protocol steps, materials, timeline, validation, and a deterministic budget."
+> "Step two of **Expert Preflight**: generate a practical execution plan from the same query and retrieved context. The app returns protocol steps, materials, timeline, validation, and a deterministic budget."
 
 On screen:
 - Click the planning action in the UI
@@ -68,7 +68,7 @@ On screen:
 ## 1:55-2:20 - MCP + close
 
 Voiceover:
-> "And this is not only a UI. The repo ships an MCP server exposing `search_similar_experiments`, so assistants can run the same search flow as a tool. **Two-Step Preflight** is live, agent-ready, and open-source."
+> "And this is not only a UI. The repo ships an MCP server exposing `search_similar_experiments`, so assistants can run the same search flow as a tool. **Expert Preflight** is live, agent-ready, and open-source."
 
 On screen:
 - Open `mcp-server/README.md`
@@ -83,4 +83,4 @@ On screen:
 - Keep one polished prompt in clipboard (120-170 words)
 - Keep a fallback clip of the search+plan flow in case Wi-Fi is unstable
 - Ensure no secrets are visible on screen (`.env`, API keys)
-- If time is tight, cut the reliability beat but keep both **Two-Step Preflight** steps
+- If time is tight, cut the reliability beat but keep both **Expert Preflight** steps
