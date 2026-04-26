@@ -1,0 +1,7 @@
+{
+  "runUrl": "https://github.com/hacknation-mintwin/similarity-search/actions/runs/24947165462",
+  "sourceBranch": "feature/experiment-similarity-onepager",
+  "targetBranch": "mcp-server",
+  "reason": "sync_or_test_failure",
+  "timestamp": "2026-04-26T03:21:56Z"
+}
