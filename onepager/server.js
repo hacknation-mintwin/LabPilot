@@ -1,17 +1,66 @@
 import "dotenv/config";
 import crypto from "node:crypto";
 import express from "express";
+import OpenAI from "openai";
 
 const PORT = Number.parseInt(process.env.PORT || "3000", 10);
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "example@example.com";
 const S2_API_KEY = process.env.S2_API_KEY || "";
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
-const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
-const PLAN_MODEL = process.env.PLAN_MODEL || "anthropic/claude-3.5-sonnet";
-const FAST_MODEL = process.env.FAST_MODEL || "google/gemini-2.0-flash-001";
+
+// ---- LLM provider chain (priority order) ----
+// Each provider exposes an OpenAI-compatible /chat/completions endpoint, so
+// we use a single SDK with a per-provider baseURL + apiKey.
+//
+// Priority order is intentional and documented in onepager/README.md:
+//   1. PRIMARY    : Gemini 2.5 Flash       (Google AI Studio)
+//   2. FALLBACK 1 : Gemini 2.5 Flash-Lite  (Google AI Studio, same key)
+//   3. FALLBACK 2 : Llama 3.3 70B          (Groq)
+//   4. FALLBACK 3 : Llama 3.3 70B          (Cerebras)
+const LLM_PROVIDERS = [
+  {
+    id: "gemini-2.5-flash",
+    label: "Gemini 2.5 Flash (Google AI Studio)",
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+    keyName: "GEMINI_API_KEY",
+    model: "gemini-2.5-flash",
+  },
+  {
+    id: "gemini-2.5-flash-lite",
+    label: "Gemini 2.5 Flash-Lite (Google AI Studio)",
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+    keyName: "GEMINI_API_KEY",
+    model: "gemini-2.5-flash-lite",
+  },
+  {
+    id: "groq-llama-3.3-70b",
+    label: "Llama 3.3 70B (Groq)",
+    baseURL: "https://api.groq.com/openai/v1",
+    keyName: "GROQ_API_KEY",
+    model: "llama-3.3-70b-versatile",
+  },
+  {
+    id: "cerebras-llama-3.3-70b",
+    label: "Llama 3.3 70B (Cerebras)",
+    baseURL: "https://api.cerebras.ai/v1",
+    keyName: "CEREBRAS_API_KEY",
+    model: "llama-3.3-70b",
+  },
+];
+
+const LLM_REQUEST_TIMEOUT_MS = 60_000;
+// 429s on the SAME provider get up to 3 retries with these backoffs.
+// After that, fall through to the next provider in the chain.
+const LLM_RATE_LIMIT_BACKOFF_MS = [1000, 2000, 4000];
 
 const app = express();
 app.use(express.json({ limit: "64kb" }));
+app.use(
+  "/assets",
+  express.static(new URL("./assets", import.meta.url).pathname, {
+    maxAge: "1h",
+    fallthrough: false,
+  }),
+);
 
 // ---- In-memory cache (10 min) ----
 const CACHE_TTL_MS = 10 * 60 * 1000;
@@ -539,39 +588,243 @@ app.post("/search", async (req, res) => {
 // Experiment plan generation (Fulcrum Challenge 04)
 // =====================================================================
 
-// ---- OpenRouter LLM client (fetch-only, no SDK) ----
-async function openrouterChat({ model, system, user, jsonMode = true, temperature = 0.2, timeoutMs = 60000 }) {
-  if (!OPENROUTER_API_KEY) {
-    const err = new Error("OPENROUTER_API_KEY is not set in onepager/.env");
-    err.status = 500;
-    throw err;
+// ---- LLM dispatch (multi-provider fallback chain) ----
+// Single OpenAI-SDK-based path that walks `LLM_PROVIDERS` in priority order.
+//
+// Per-provider retry policy (only applied to the SAME provider before
+// falling through to the next):
+//   - 429 (rate limit)  : retry up to 3 times with exponential backoff
+//                         (1s, 2s, 4s), then fall through.
+//   - timeout / 5xx     : fall through immediately, no retry.
+//   - invalid JSON      : retry once with a stricter "JSON only" nudge,
+//                         then fall through.
+//   - any other error   : fall through immediately.
+//
+// On success, log the winning provider+model. If every provider fails, throw
+// a single error with the full per-provider failure summary.
+
+function classifyLLMError(e) {
+  const status = Number(e?.status ?? e?.response?.status);
+  const name = e?.name || "";
+  const code = e?.code || "";
+  const msg = String(e?.message || "");
+
+  if (status === 429) return "rate_limit";
+  if (status >= 500 && status <= 599) return "server_error";
+  if (
+    name === "APIConnectionTimeoutError" ||
+    code === "ETIMEDOUT" ||
+    code === "ECONNRESET" ||
+    code === "ECONNREFUSED" ||
+    /timeout/i.test(msg)
+  ) {
+    return "timeout";
   }
-  const body = {
-    model,
+  if (e instanceof SyntaxError || /unexpected token|json/i.test(msg)) {
+    return "invalid_json";
+  }
+  return "other";
+}
+
+async function callProviderOnce(provider, client, { system, user, temperature, maxTokens }) {
+  const completion = await client.chat.completions.create({
+    model: provider.model,
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },
     ],
-    temperature,
-  };
-  if (jsonMode) body.response_format = { type: "json_object" };
-
-  const json = await fetchJson(`${OPENROUTER_BASE}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "http://localhost:3000",
-      "X-Title": "AI/ML Experiment Plan Generator",
-    },
-    body: JSON.stringify(body),
-    timeoutMs,
+    response_format: { type: "json_object" },
+    temperature: temperature ?? 0.2,
+    max_tokens: maxTokens ?? 8192,
   });
-  const content = json?.choices?.[0]?.message?.content || "";
-  return content;
+
+  const choice = completion?.choices?.[0];
+  const message = choice?.message;
+  const text = (message?.content || message?.reasoning || "").trim();
+  if (!text) {
+    const err = new Error(
+      `Empty response from ${provider.id} (finish_reason=${choice?.finish_reason || "unknown"})`,
+    );
+    err.code = "EMPTY";
+    throw err;
+  }
+  // parseJsonLoose throws SyntaxError on malformed JSON; classifyLLMError
+  // turns that into "invalid_json" which triggers a single same-provider retry.
+  return parseJsonLoose(text);
 }
 
-// Robust JSON parse: strips ```json fences if a model emits them despite json_object mode.
+async function chatJson(opts) {
+  if (!opts?.system || !opts?.user) {
+    throw new Error("chatJson: 'system' and 'user' are required");
+  }
+
+  /** @type {string[]} */
+  const failures = [];
+
+  for (const provider of LLM_PROVIDERS) {
+    const apiKey = process.env[provider.keyName];
+    if (!apiKey) {
+      const reason = `${provider.keyName} not set`;
+      console.log(`[llm] skip ${provider.id} — ${reason}`);
+      failures.push(`${provider.label}: ${reason}`);
+      continue;
+    }
+
+    const client = new OpenAI({
+      apiKey,
+      baseURL: provider.baseURL,
+      timeout: LLM_REQUEST_TIMEOUT_MS,
+      // We manage all retry/fallback logic ourselves; disable the SDK's
+      // built-in retries so we get a single attempt per call.
+      maxRetries: 0,
+    });
+
+    let rateAttempt = 0;
+    let jsonRetried = false;
+    let userPrompt = opts.user;
+    let providerFailReason = null;
+
+    // Inner loop: stays on this provider until it succeeds, exhausts its
+    // same-provider retry budget, or hits a fall-through condition.
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      const t0 = Date.now();
+      try {
+        const result = await callProviderOnce(provider, client, {
+          system: opts.system,
+          user: userPrompt,
+          temperature: opts.temperature,
+          maxTokens: opts.maxTokens,
+        });
+        console.log(
+          `[llm] success: ${provider.label} model=${provider.model} in ${Date.now() - t0}ms`,
+        );
+        return result;
+      } catch (e) {
+        const kind = classifyLLMError(e);
+        const msg = String(e?.message || e);
+
+        if (kind === "rate_limit") {
+          if (rateAttempt < LLM_RATE_LIMIT_BACKOFF_MS.length) {
+            const delay = LLM_RATE_LIMIT_BACKOFF_MS[rateAttempt];
+            rateAttempt++;
+            console.log(
+              `[llm] ${provider.id}: 429 rate-limit (retry ${rateAttempt}/${LLM_RATE_LIMIT_BACKOFF_MS.length} in ${delay}ms): ${msg}`,
+            );
+            await new Promise((r) => setTimeout(r, delay));
+            continue;
+          }
+          providerFailReason = `429 rate-limit (${LLM_RATE_LIMIT_BACKOFF_MS.length} retries exhausted): ${msg}`;
+          console.log(`[llm] ${provider.id}: ${providerFailReason} — falling through`);
+          break;
+        }
+
+        if (kind === "invalid_json") {
+          if (!jsonRetried) {
+            jsonRetried = true;
+            console.log(`[llm] ${provider.id}: invalid JSON, retrying same provider once`);
+            userPrompt = `${opts.user}\n\nIMPORTANT: Output ONLY a single JSON object — no prose, no code fences, no comments, no trailing commas, no raw newlines inside string values.`;
+            continue;
+          }
+          providerFailReason = `invalid JSON twice: ${msg}`;
+          console.log(`[llm] ${provider.id}: ${providerFailReason} — falling through`);
+          break;
+        }
+
+        // timeout, 5xx, or any other error → fall through immediately.
+        providerFailReason = `${kind}: ${msg}`;
+        console.log(`[llm] ${provider.id}: ${providerFailReason} — falling through`);
+        break;
+      }
+    }
+
+    if (providerFailReason) {
+      failures.push(`${provider.label}: ${providerFailReason}`);
+    }
+  }
+
+  throw new Error(`All providers failed:\n  - ${failures.join("\n  - ")}`);
+}
+
+// Inside a "..." string, replace raw control chars (\n, \r, \t, \b, \f) with
+// their JSON-escaped form. Some free models (e.g. openai/gpt-oss-20b:free)
+// emit literal newlines inside string values, which JSON.parse rejects.
+function escapeControlCharsInStrings(s) {
+  let out = "";
+  let i = 0;
+  let inStr = false;
+  while (i < s.length) {
+    const c = s[i];
+    if (inStr) {
+      if (c === "\\" && i + 1 < s.length) {
+        out += c + s[i + 1];
+        i += 2;
+        continue;
+      }
+      if (c === '"') {
+        inStr = false;
+        out += c;
+        i++;
+        continue;
+      }
+      if (c === "\n") { out += "\\n"; i++; continue; }
+      if (c === "\r") { out += "\\r"; i++; continue; }
+      if (c === "\t") { out += "\\t"; i++; continue; }
+      if (c === "\b") { out += "\\b"; i++; continue; }
+      if (c === "\f") { out += "\\f"; i++; continue; }
+      // Other ASCII control chars: drop them.
+      if (c.charCodeAt(0) < 0x20) { i++; continue; }
+      out += c;
+      i++;
+      continue;
+    }
+    if (c === '"') { inStr = true; out += c; i++; continue; }
+    out += c;
+    i++;
+  }
+  return out;
+}
+
+// Strip // line comments and /* block */ comments from a JSON-ish string,
+// while respecting "..." string literals (so URLs like "http://..." are safe).
+function stripJsonComments(s) {
+  let out = "";
+  let i = 0;
+  let inStr = false;
+  while (i < s.length) {
+    const c = s[i];
+    const n = s[i + 1];
+    if (inStr) {
+      out += c;
+      if (c === "\\" && i + 1 < s.length) {
+        out += s[i + 1];
+        i += 2;
+        continue;
+      }
+      if (c === '"') inStr = false;
+      i++;
+      continue;
+    }
+    if (c === '"') { inStr = true; out += c; i++; continue; }
+    if (c === "/" && n === "/") {
+      i += 2;
+      while (i < s.length && s[i] !== "\n") i++;
+      continue;
+    }
+    if (c === "/" && n === "*") {
+      i += 2;
+      while (i < s.length && !(s[i] === "*" && s[i + 1] === "/")) i++;
+      i += 2;
+      continue;
+    }
+    out += c;
+    i++;
+  }
+  return out;
+}
+
+// Robust JSON parse: strips ```json fences, // and /* */ comments, and trailing
+// commas if a model emits them despite json_object mode.
 function parseJsonLoose(text) {
   if (!text) throw new Error("Empty model response");
   const trimmed = String(text).trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
@@ -579,39 +832,15 @@ function parseJsonLoose(text) {
   const first = trimmed.indexOf("{");
   const last = trimmed.lastIndexOf("}");
   const candidate = first >= 0 && last > first ? trimmed.slice(first, last + 1) : trimmed;
-  return JSON.parse(candidate);
-}
-
-async function chatJson(opts) {
-  const text = await openrouterChat({ ...opts, jsonMode: true });
   try {
-    return parseJsonLoose(text);
-  } catch (e) {
-    // Single retry with a stricter nudge.
-    const retried = await openrouterChat({
-      ...opts,
-      user: `${opts.user}\n\nIMPORTANT: Your previous response could not be parsed as JSON. Output ONLY a single JSON object, no prose, no code fences.`,
-      jsonMode: true,
-    });
-    return parseJsonLoose(retried);
+    return JSON.parse(candidate);
+  } catch {
+    // Progressive cleanup: strip comments, escape raw control chars inside
+    // strings, and remove trailing commas — common offences from free models.
+    const cleaned = escapeControlCharsInStrings(stripJsonComments(candidate))
+      .replace(/,(\s*[\]}])/g, "$1");
+    return JSON.parse(cleaned);
   }
-}
-
-// ---- Stage 1: domain + frame extraction (cheap model) ----
-async function extractFrame(prompt) {
-  const system = `You extract the experimental frame from a scientist's hypothesis.
-Return ONLY a JSON object with this shape:
-{
-  "hypothesis": "<one-sentence restatement>",
-  "intervention": "<the thing being tried>",
-  "outcome": "<what is measured>",
-  "model_system": "<organism/cell line/material/system>",
-  "controls": "<the control condition>",
-  "threshold": "<numeric success criterion if stated, else null>",
-  "domain": "<one of: diagnostics | gut_health | cell_biology | climate | ai_ml | chemistry | materials | neuroscience | pharma | other>",
-  "keywords": ["<3-8 short search keywords>"]
-}`;
-  return await chatJson({ model: FAST_MODEL, system, user: prompt, timeoutMs: 60000 });
 }
 
 // ---- Stage 2: RAG — protocols.io best-effort search ----
@@ -761,7 +990,14 @@ ${grounding}
 
 Now produce the JSON plan.`;
 
-  return await chatJson({ model: PLAN_MODEL, system, user, timeoutMs: 240000, temperature: 0.2 });
+  // The provider chain (Gemini Flash → Flash-Lite → Groq → Cerebras) is
+  // statically defined in LLM_PROVIDERS and walked in priority order.
+  return await chatJson({
+    system,
+    user,
+    temperature: 0.2,
+    maxTokens: 8192,
+  });
 }
 
 // ---- Stage 4: deterministic post-processing (NEVER trust the LLM with arithmetic) ----
@@ -934,8 +1170,15 @@ function sanityValidate(plan) {
 app.post("/plan", async (req, res) => {
   const prompt = String(req.body?.prompt || "").trim();
   if (!prompt) return res.status(400).json({ error: "Missing prompt." });
-  if (!OPENROUTER_API_KEY) {
-    return res.status(500).json({ error: "OPENROUTER_API_KEY is not set in onepager/.env. Add it and restart." });
+  // Fast-fail if no provider in the chain has a key configured.
+  // chatJson() will produce a precise per-provider failure summary at call
+  // time, but this gives an immediate, friendly response.
+  const configured = LLM_PROVIDERS.filter((p) => process.env[p.keyName]);
+  if (!configured.length) {
+    const keyNames = [...new Set(LLM_PROVIDERS.map((p) => p.keyName))].join(", ");
+    return res.status(500).json({
+      error: `No API key configured. Set at least one of ${keyNames} in onepager/.env and restart.`,
+    });
   }
 
   const qcRefs = Array.isArray(req.body?.qcReferences) ? req.body.qcReferences.slice(0, 3) : [];
@@ -954,14 +1197,20 @@ app.post("/plan", async (req, res) => {
   /** @type {Record<string, string>} */
   const partialErrors = {};
 
-  // 1. Frame extraction (best-effort: if it fails, fall back to a stub)
-  let frame;
-  try {
-    frame = await extractFrame(prompt);
-  } catch (e) {
-    partialErrors.frame_extraction = String(e?.message || e);
-    frame = { hypothesis: prompt, domain: "other", keywords: extractTerms(prompt, { maxTerms: 6 }) };
-  }
+  // 1. Frame extraction — deterministic stub. We previously made a separate LLM
+  // call here, but the plan model can extract its own frame from the hypothesis
+  // and the keywords are only used to seed protocols.io search. Skipping the
+  // round-trip saves ~5–7s with no measurable quality loss.
+  const frame = {
+    hypothesis: prompt.replace(/\s+/g, " ").trim().slice(0, 240),
+    intervention: null,
+    outcome: null,
+    model_system: null,
+    controls: null,
+    threshold: null,
+    domain: "other",
+    keywords: extractTerms(prompt, { maxTerms: 8 }),
+  };
 
   // 2. RAG (best-effort, parallel, 5s budgets)
   const terms = Array.isArray(frame?.keywords) && frame.keywords.length

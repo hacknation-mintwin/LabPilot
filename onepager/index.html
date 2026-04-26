@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<<<<<<< Updated upstream
     <title>LabPilot</title>
+=======
+    <title>LabPilot — Experiment planner</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+>>>>>>> Stashed changes
     <style>
       :root {
         --bg: #0b1020;
@@ -52,17 +57,46 @@
         align-items: flex-start;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        min-width: 0;
+      }
+      .brand-logo {
+        width: 88px;
+        height: 88px;
+      }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
       }
       h1 {
-        font-size: 20px;
+        font-size: 32px;
         margin: 0;
-        letter-spacing: 0.2px;
+        letter-spacing: -0.6px;
+        font-weight: 700;
+        line-height: 1.05;
+        background: linear-gradient(90deg, #ffffff 0%, #d6cdff 55%, #b6f0d3 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .brand-tag {
+        margin-top: 4px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--muted);
       }
       .sub {
-        margin: 6px 0 0;
+        margin: 8px 0 0;
         color: var(--muted);
-        line-height: 1.4;
+        line-height: 1.45;
         font-size: 13px;
       }
       textarea {
@@ -347,14 +381,31 @@
 
       /* Protocol stepper */
       .step {
+        position: relative;
         display: grid;
         grid-template-columns: 36px 1fr;
-        gap: 12px;
-        padding: 14px;
+        gap: 14px;
+        padding: 16px 16px 16px 22px;
         border: 1px solid var(--border);
         background: linear-gradient(180deg, var(--card2), rgba(255, 255, 255, 0.03));
         border-radius: 14px;
         margin-bottom: 10px;
+        overflow: hidden;
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+      .step::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.95), rgba(36, 209, 143, 0.7));
+      }
+      .step:hover {
+        transform: translateY(-1px);
+        border-color: rgba(124, 92, 255, 0.45);
+        box-shadow: 0 8px 28px rgba(124, 92, 255, 0.18);
       }
       .step-num {
         width: 32px;
@@ -366,6 +417,7 @@
         font-weight: 700;
         font-size: 14px;
         color: white;
+        box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.14), 0 4px 14px rgba(124, 92, 255, 0.35);
       }
       .step-head {
         display: flex;
@@ -486,28 +538,65 @@
       }
       .budget-bar {
         display: flex;
-        height: 22px;
+        height: 14px;
         border-radius: 999px;
         overflow: hidden;
         border: 1px solid var(--border);
         background: rgba(0, 0, 0, 0.25);
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
       }
       .budget-bar > div {
-        font-size: 10.5px;
-        color: white;
-        padding: 0 8px;
-        display: flex;
+        height: 100%;
+        transition: filter 0.18s ease;
+      }
+      .budget-bar > div:hover { filter: brightness(1.15); }
+      .budget-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .budget-card {
+        display: grid;
+        grid-template-columns: 12px 1fr auto;
         align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        transition: border-color 0.18s ease, transform 0.18s ease;
+      }
+      .budget-card:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      .budget-card .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0 0 12px currentColor;
+      }
+      .budget-card .name {
+        font-size: 12.5px;
+        text-transform: capitalize;
+        color: rgba(255, 255, 255, 0.92);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      .budget-bar > div:nth-child(1) { background: rgba(124, 92, 255, 0.85); }
-      .budget-bar > div:nth-child(2) { background: rgba(36, 209, 143, 0.85); }
-      .budget-bar > div:nth-child(3) { background: rgba(255, 199, 0, 0.85); color: #2b1f00; }
-      .budget-bar > div:nth-child(4) { background: rgba(255, 84, 113, 0.85); }
-      .budget-bar > div:nth-child(5) { background: rgba(120, 200, 255, 0.85); color: #002a3d; }
-      .budget-bar > div:nth-child(6) { background: rgba(200, 200, 200, 0.85); color: #111; }
+      .budget-card .amt {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.96);
+        white-space: nowrap;
+      }
+      .budget-card .pct {
+        margin-left: 4px;
+        color: var(--muted);
+        font-weight: 400;
+      }
       .budget-legend {
         display: flex;
         flex-wrap: wrap;
@@ -570,55 +659,217 @@
 
       /* Validation + risks */
       .vbox {
-        background: rgba(0, 0, 0, 0.22);
+        position: relative;
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.06), rgba(0, 0, 0, 0.24));
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 14px;
+        padding: 14px 16px 14px 18px;
         margin-bottom: 10px;
+        overflow: hidden;
+      }
+      .vbox::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, rgba(36, 209, 143, 0.9), rgba(124, 92, 255, 0.7));
       }
       .vbox h4 {
         margin: 0 0 6px;
         font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.5px;
         color: var(--muted);
       }
-      .vbox p, .vbox ul {
+      .vbox p {
         margin: 0;
+        font-size: 13.5px;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.92);
+      }
+      .vstats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .vstat {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+      .vstat .lbl {
+        display: block;
+        font-size: 10px;
+        font-family: var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .vstat .val {
+        font-family: var(--mono);
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        word-break: break-word;
+      }
+      .vlist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 6px;
+      }
+      .vlist li {
+        display: grid;
+        grid-template-columns: 22px 1fr;
+        align-items: start;
+        gap: 10px;
+        padding: 8px 10px;
+        background: rgba(0, 0, 0, 0.22);
+        border-radius: 8px;
         font-size: 13px;
         line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
       }
-      .vbox ul { padding-left: 18px; }
-      .vstats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 8px;
+      .vlist .ico {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 1;
+      }
+      .vlist .ico.ok {
+        background: rgba(36, 209, 143, 0.18);
+        color: #b6f0d3;
+        box-shadow: inset 0 0 0 1px rgba(36, 209, 143, 0.4);
+      }
+      .vlist .ico.warn {
+        background: rgba(255, 199, 0, 0.18);
+        color: #ffe6a0;
+        box-shadow: inset 0 0 0 1px rgba(255, 199, 0, 0.4);
       }
       .risk {
+        position: relative;
         display: grid;
-        grid-template-columns: 80px 1fr;
-        gap: 12px;
+        grid-template-columns: 86px 1fr;
+        gap: 14px;
         align-items: start;
-        padding: 12px 14px;
+        padding: 14px 16px 14px 22px;
         border: 1px solid var(--border);
         border-radius: 12px;
-        margin-bottom: 8px;
-        background: rgba(0, 0, 0, 0.18);
+        margin-bottom: 10px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.22));
+        overflow: hidden;
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+      .risk::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+      }
+      .risk.r-low::before {
+        background: linear-gradient(180deg, rgba(36, 209, 143, 0.95), rgba(36, 209, 143, 0.3));
+      }
+      .risk.r-med::before {
+        background: linear-gradient(180deg, rgba(255, 199, 0, 0.95), rgba(255, 199, 0, 0.3));
+      }
+      .risk.r-high::before {
+        background: linear-gradient(180deg, rgba(255, 84, 113, 1), rgba(255, 84, 113, 0.4));
+      }
+      .risk:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+      }
+      .risk.r-low:hover {
+        border-color: rgba(36, 209, 143, 0.45);
+        box-shadow: 0 8px 28px rgba(36, 209, 143, 0.18);
+      }
+      .risk.r-med:hover {
+        border-color: rgba(255, 199, 0, 0.45);
+        box-shadow: 0 8px 28px rgba(255, 199, 0, 0.18);
+      }
+      .risk.r-high:hover {
+        border-color: rgba(255, 84, 113, 0.5);
+        box-shadow: 0 8px 28px rgba(255, 84, 113, 0.22);
       }
       .sev {
         display: inline-block;
-        font-size: 11px;
+        font-size: 10.5px;
         font-family: var(--mono);
-        padding: 3px 10px;
+        font-weight: 700;
+        letter-spacing: 0.7px;
+        padding: 4px 10px;
         border-radius: 999px;
         text-align: center;
         text-transform: uppercase;
       }
-      .sev-low { background: rgba(36, 209, 143, 0.18); color: #b6f0d3; }
-      .sev-med { background: rgba(255, 199, 0, 0.18); color: #ffe6a0; }
-      .sev-high { background: rgba(255, 84, 113, 0.18); color: #ffc1cb; }
-      .risk-mit { color: var(--muted); margin-top: 4px; font-size: 12.5px; }
+      .sev-low {
+        background: linear-gradient(135deg, rgba(36, 209, 143, 0.24), rgba(36, 209, 143, 0.1));
+        color: #b6f0d3;
+        box-shadow: inset 0 0 0 1px rgba(36, 209, 143, 0.4);
+      }
+      .sev-med {
+        background: linear-gradient(135deg, rgba(255, 199, 0, 0.26), rgba(255, 199, 0, 0.12));
+        color: #ffe6a0;
+        box-shadow: inset 0 0 0 1px rgba(255, 199, 0, 0.4);
+      }
+      .sev-high {
+        background: linear-gradient(135deg, rgba(255, 84, 113, 0.3), rgba(255, 84, 113, 0.14));
+        color: #ffc1cb;
+        box-shadow: inset 0 0 0 1px rgba(255, 84, 113, 0.5), 0 0 16px rgba(255, 84, 113, 0.25);
+        animation: risk-pulse 2.4s ease-in-out infinite;
+      }
+      @keyframes risk-pulse {
+        0%, 100% {
+          box-shadow: inset 0 0 0 1px rgba(255, 84, 113, 0.5), 0 0 14px rgba(255, 84, 113, 0.22);
+        }
+        50% {
+          box-shadow: inset 0 0 0 1px rgba(255, 84, 113, 0.7), 0 0 22px rgba(255, 84, 113, 0.42);
+        }
+      }
+      .risk-title {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.96);
+      }
+      .risk-mit {
+        margin-top: 8px;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.78);
+      }
+      .risk-mit::before {
+        content: "Mitigation";
+        display: inline-block;
+        margin-right: 8px;
+        padding: 2px 7px;
+        font-size: 9.5px;
+        font-family: var(--mono);
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: rgba(124, 92, 255, 0.95);
+        background: rgba(124, 92, 255, 0.14);
+        border-radius: 4px;
+        vertical-align: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sev-high { animation: none; }
+        .step, .risk, .budget-card { transition: none; }
+      }
 
       /* Exports + novelty */
       .exports {
@@ -645,18 +896,193 @@
       .novelty-not_found { color: #b6f0d3; border-color: rgba(36, 209, 143, 0.45); }
       .novelty-similar_work_exists { color: #ffe6a0; border-color: rgba(255, 199, 0, 0.45); }
       .novelty-exact_match_found { color: #ffc1cb; border-color: rgba(255, 84, 113, 0.45); }
+
+      /* Generation overlay (covers the page during /plan) */
+      .gen-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(7, 11, 23, 0.78);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        padding: 20px;
+        animation: gen-fade-in 0.2s ease-out;
+      }
+      .gen-overlay.show { display: flex; }
+      .gen-card {
+        width: 100%;
+        max-width: 560px;
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.08), var(--bg));
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(124, 92, 255, 0.18);
+      }
+      .gen-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 4px;
+      }
+      .gen-title { font-size: 16px; font-weight: 650; color: white; }
+      .gen-mode-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        padding: 4px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--muted);
+      }
+      .gen-mode-badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: rgba(124, 92, 255, 0.85);
+        box-shadow: 0 0 8px rgba(124, 92, 255, 0.6);
+      }
+      .gen-mode-badge.live .dot {
+        background: rgba(36, 209, 143, 0.9);
+        box-shadow: 0 0 8px rgba(36, 209, 143, 0.6);
+      }
+      .gen-elapsed {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+      .gen-substep {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.82);
+        margin: 4px 0 14px;
+        min-height: 18px;
+        transition: opacity 0.18s ease;
+      }
+      .gen-stages { display: grid; gap: 6px; }
+      .gen-stage {
+        display: grid;
+        grid-template-columns: 22px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.18);
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+      .gen-stage .ico {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+      .gen-stage .dur {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--muted);
+      }
+      .gen-stage.active {
+        background: linear-gradient(180deg, rgba(124, 92, 255, 0.18), rgba(124, 92, 255, 0.05));
+        border-color: rgba(124, 92, 255, 0.55);
+        color: white;
+        box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.3), 0 8px 24px rgba(124, 92, 255, 0.18);
+      }
+      .gen-stage.active .ico {
+        background: rgba(124, 92, 255, 0.9);
+        color: white;
+        animation: gen-pulse 1.4s ease-in-out infinite;
+      }
+      .gen-stage.done { color: rgba(255, 255, 255, 0.85); }
+      .gen-stage.done .ico {
+        background: rgba(36, 209, 143, 0.22);
+        color: #b6f0d3;
+        box-shadow: inset 0 0 0 1px rgba(36, 209, 143, 0.5);
+      }
+      .gen-stage.failed {
+        color: rgba(255, 255, 255, 0.85);
+        border-color: rgba(255, 84, 113, 0.45);
+      }
+      .gen-stage.failed .ico {
+        background: rgba(255, 84, 113, 0.22);
+        color: #ffc1cb;
+        box-shadow: inset 0 0 0 1px rgba(255, 84, 113, 0.5);
+        animation: none;
+      }
+      .gen-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 14px;
+      }
+      .gen-cancel {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--border);
+        color: rgba(255, 255, 255, 0.85);
+        padding: 7px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 12.5px;
+        font-family: inherit;
+      }
+      .gen-cancel:hover {
+        border-color: rgba(255, 84, 113, 0.5);
+        color: #ffc1cb;
+      }
+      @keyframes gen-pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.55); }
+        50%      { box-shadow: 0 0 0 6px rgba(124, 92, 255, 0); }
+      }
+      @keyframes gen-fade-in {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .gen-overlay { animation: none; }
+        .gen-stage.active .ico { animation: none; }
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
       <div class="card">
         <div class="header">
+<<<<<<< Updated upstream
           <div>
             <h1>LabPilot</h1>
             <p class="sub">
               Paste an experiment idea (≤200 words). We’ll fan out to 5 free sources and rank the top 10 most similar
               prior experiments using cosine similarity on Semantic Scholar embeddings.
             </p>
+=======
+          <div class="brand">
+            <img class="brand-logo" src="/assets/logo.svg" alt="" />
+            <div class="brand-text">
+              <h1>LabPilot</h1>
+              <span class="brand-tag">Experiment planner</span>
+              <p class="sub">
+                Paste an experiment idea (≤200 words). We’ll fan out to 5 free sources, rank the top 10 most similar
+                prior experiments, and draft a grounded, costed protocol.
+              </p>
+            </div>
+>>>>>>> Stashed changes
           </div>
         </div>
 
@@ -664,9 +1090,11 @@
 
         <div class="row">
           <div id="counter" class="counter">0 / 200 words</div>
-          <button id="submit" disabled>
-            <span>Search</span>
-          </button>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="submit" disabled>
+              <span>Search</span>
+            </button>
+          </div>
         </div>
 
         <div id="meta" class="meta">
@@ -729,6 +1157,24 @@
             <button id="exportMd">Export Markdown</button>
             <button id="exportJson">Export JSON</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="genOverlay" class="gen-overlay" role="dialog" aria-modal="true" aria-labelledby="genTitle">
+      <div class="gen-card">
+        <div class="gen-header">
+          <div id="genTitle" class="gen-title">Generating experiment plan</div>
+          <div id="genModeBadge" class="gen-mode-badge">
+            <span class="dot"></span>
+            <span id="genModeText">experimental · 18s</span>
+          </div>
+        </div>
+        <div id="genElapsed" class="gen-elapsed">0.0s elapsed</div>
+        <div id="genSubstep" class="gen-substep">Starting…</div>
+        <div id="genStages" class="gen-stages"></div>
+        <div class="gen-actions">
+          <button id="genCancel" class="gen-cancel" type="button">Cancel</button>
         </div>
       </div>
     </div>
@@ -889,7 +1335,6 @@
         }
       });
 
-      // ===== Experiment plan =====
       const state = { lastPrompt: "", qcRefs: [], plan: null, novelty: null };
 
       const elPlanCta = document.getElementById("planCta");
@@ -1067,17 +1512,39 @@
           <div class="budget-legend" style="margin-top:10px;">${subFooter}</div>`;
       }
 
+      const BUDGET_PALETTE = [
+        "rgba(124, 92, 255, 0.9)",
+        "rgba(36, 209, 143, 0.9)",
+        "rgba(255, 199, 0, 0.9)",
+        "rgba(255, 84, 113, 0.9)",
+        "rgba(120, 200, 255, 0.9)",
+        "rgba(200, 200, 200, 0.9)",
+      ];
       function renderBudgetBar(catMap) {
         const entries = Object.entries(catMap || {}).filter(([, v]) => Number(v) > 0);
+        if (!entries.length) {
+          return `<div class="pane-empty" style="margin:0;">No data.</div>`;
+        }
         const total = entries.reduce((a, [, v]) => a + Number(v), 0) || 1;
         const segs = entries
-          .map(([k, v]) => {
+          .map(([k, v], i) => {
             const pct = (Number(v) / total) * 100;
-            return `<div style="width:${pct.toFixed(2)}%" title="${esc(k)}: ${gbp(v)}">${esc(k)} ${gbp(v)}</div>`;
+            const color = BUDGET_PALETTE[i % BUDGET_PALETTE.length];
+            return `<div style="width:${pct.toFixed(2)}%; background:${color};" title="${esc(k)}: ${gbp(v)} (${pct.toFixed(0)}%)"></div>`;
           })
           .join("");
-        const legend = entries.map(([k, v]) => `<span>${esc(k)}: <strong>${gbp(v)}</strong></span>`).join(" · ");
-        return `<div class="budget-bar">${segs}</div><div class="budget-legend">${legend}</div>`;
+        const cards = entries
+          .map(([k, v], i) => {
+            const pct = (Number(v) / total) * 100;
+            const color = BUDGET_PALETTE[i % BUDGET_PALETTE.length];
+            return `<div class="budget-card">
+              <span class="dot" style="background:${color}; color:${color};"></span>
+              <span class="name">${esc(k)}</span>
+              <span class="amt">${gbp(v)}<span class="pct">· ${pct.toFixed(0)}%</span></span>
+            </div>`;
+          })
+          .join("");
+        return `<div class="budget-bar">${segs}</div><div class="budget-cards">${cards}</div>`;
       }
 
       function renderBudget(plan) {
@@ -1132,21 +1599,25 @@
 
       function renderValidation(plan) {
         const v = plan.validation || {};
-        const successList = (v.success_criteria || []).map((s) => `<li>${esc(s)}</li>`).join("");
-        const failList = (v.failure_modes || []).map((s) => `<li>${esc(s)}</li>`).join("");
+        const successList = (v.success_criteria || [])
+          .map((s) => `<li><span class="ico ok">✓</span><span>${esc(s)}</span></li>`)
+          .join("");
+        const failList = (v.failure_modes || [])
+          .map((s) => `<li><span class="ico warn">!</span><span>${esc(s)}</span></li>`)
+          .join("");
         return `
           <div class="vbox">
             <h4>Primary endpoint</h4>
             <p>${esc(v.primary_endpoint || "—")}</p>
             <div class="vstats">
-              <span class="chip">test: ${esc(v.statistical_test || "—")}</span>
-              <span class="chip">n = ${esc(String(v.sample_size ?? "—"))}</span>
-              <span class="chip">α = ${esc(String(v.alpha ?? 0.05))}</span>
-              <span class="chip">power = ${esc(String(v.power ?? 0.8))}</span>
+              <div class="vstat"><span class="lbl">Test</span><span class="val">${esc(v.statistical_test || "—")}</span></div>
+              <div class="vstat"><span class="lbl">Sample size</span><span class="val">${esc(String(v.sample_size ?? "—"))}</span></div>
+              <div class="vstat"><span class="lbl">α (alpha)</span><span class="val">${esc(String(v.alpha ?? 0.05))}</span></div>
+              <div class="vstat"><span class="lbl">Power</span><span class="val">${esc(String(v.power ?? 0.8))}</span></div>
             </div>
           </div>
-          ${successList ? `<div class="vbox"><h4>Success criteria</h4><ul>${successList}</ul></div>` : ""}
-          ${failList ? `<div class="vbox"><h4>Failure modes</h4><ul>${failList}</ul></div>` : ""}`;
+          ${successList ? `<div class="vbox"><h4>Success criteria</h4><ul class="vlist success">${successList}</ul></div>` : ""}
+          ${failList ? `<div class="vbox"><h4>Failure modes</h4><ul class="vlist failure">${failList}</ul></div>` : ""}`;
       }
 
       function renderRisks(plan) {
@@ -1156,11 +1627,11 @@
           .map((r) => {
             const sev = ["low", "med", "high"].includes(r.severity) ? r.severity : "med";
             return `
-              <div class="risk">
+              <div class="risk r-${sev}">
                 <span class="sev sev-${sev}">${sev}</span>
                 <div>
-                  <div>${esc(r.risk || "")}</div>
-                  ${r.mitigation ? `<div class="risk-mit">Mitigation: ${esc(r.mitigation)}</div>` : ""}
+                  <div class="risk-title">${esc(r.risk || "")}</div>
+                  ${r.mitigation ? `<div class="risk-mit">${esc(r.mitigation)}</div>` : ""}
                 </div>
               </div>`;
           })
@@ -1311,43 +1782,329 @@
         downloadFile("experiment-plan.json", JSON.stringify(state.plan, null, 2), "application/json");
       });
 
-      const PLAN_STAGES = [
-        "Extracting experiment frame…",
-        "Searching protocols.io…",
-        "Drafting plan with grounded references…",
-        "Computing budget and timeline…",
+      // ---- Generation overlay: stages, modes, controller ----
+      const GENERATION_STAGES = [
+        {
+          id: "literature",
+          label: "Literature search",
+          duration: 2000,
+          substeps: [
+            "Searching OpenAlex (240M papers)…",
+            "Searching Europe PMC…",
+            "Classifying novelty…",
+          ],
+        },
+        {
+          id: "protocol",
+          label: "Protocol drafting",
+          duration: 5000,
+          substeps: [
+            "Adapting trehalose cryopreservation method…",
+            "Sequencing freezing and thawing steps…",
+            "Specifying timing and conditions…",
+          ],
+        },
+        {
+          id: "materials",
+          label: "Materials sourcing",
+          duration: 4000,
+          substeps: [
+            "Looking up Sigma-Aldrich catalog…",
+            "Verifying ATCC cell line numbers…",
+            "Cross-referencing supplier prices…",
+          ],
+        },
+        {
+          id: "timeline",
+          label: "Timeline",
+          duration: 2000,
+          substeps: ["Mapping phase dependencies…", "Estimating durations…"],
+        },
+        {
+          id: "budget",
+          label: "Budget",
+          duration: 1000,
+          substeps: ["Computing line totals…", "Applying 15% overhead…"],
+        },
+        {
+          id: "validation",
+          label: "Validation",
+          duration: 2000,
+          substeps: ["Defining success metrics…", "Specifying assay protocols…"],
+        },
+        {
+          id: "risks",
+          label: "Risks",
+          duration: 2000,
+          substeps: ["Identifying failure modes…", "Suggesting mitigations…"],
+        },
       ];
-      function rotatePlanStages() {
-        let i = 0;
-        elPlanStage.textContent = PLAN_STAGES[0];
-        return setInterval(() => {
-          i = (i + 1) % PLAN_STAGES.length;
-          elPlanStage.textContent = PLAN_STAGES[i];
-        }, 3000);
+      const GENERATION_TOTAL_MS = GENERATION_STAGES.reduce((a, s) => a + s.duration, 0);
+      // Substeps for live mode — backend has no SSE today, so these describe
+      // the real high-level work (single /plan call to the multi-provider
+      // chain) instead of inventing per-stage telemetry we don't have.
+      const LIVE_SUBSTEPS = [
+        "Calling multi-provider LLM chain…",
+        "Awaiting Gemini / Groq / Cerebras response…",
+        "Parsing structured plan…",
+      ];
+      const LIVE_STAGE_CADENCE_MS = 1500;
+
+      // Mode is read from localStorage (default "experimental"). The visible
+      // toggle UI was removed; to test live mode, run in DevTools:
+      //   localStorage.setItem("gen.mode", "live")
+      const GEN_MODE_KEY = "gen.mode";
+      function getGenMode() {
+        return localStorage.getItem(GEN_MODE_KEY) === "live" ? "live" : "experimental";
+      }
+
+      const elGenOverlay = document.getElementById("genOverlay");
+      const elGenModeBadge = document.getElementById("genModeBadge");
+      const elGenModeText = document.getElementById("genModeText");
+      const elGenElapsed = document.getElementById("genElapsed");
+      const elGenSubstep = document.getElementById("genSubstep");
+      const elGenStages = document.getElementById("genStages");
+      const elGenCancel = document.getElementById("genCancel");
+
+      function paintGenStages(states) {
+        const ICONS = { pending: "·", active: "·", done: "✓", failed: "✕" };
+        elGenStages.innerHTML = GENERATION_STAGES.map((s, i) => {
+          const state = states[i] || "pending";
+          return `<div class="gen-stage ${state}">
+            <span class="ico">${ICONS[state]}</span>
+            <span>${esc(s.label)}</span>
+            <span class="dur">${(s.duration / 1000).toFixed(1)}s</span>
+          </div>`;
+        }).join("");
+      }
+
+      function setGenSubstep(text) {
+        elGenSubstep.style.opacity = "0";
+        setTimeout(() => {
+          elGenSubstep.textContent = text;
+          elGenSubstep.style.opacity = "1";
+        }, 120);
+      }
+
+      function openGenOverlay(mode) {
+        elGenModeBadge.classList.toggle("live", mode === "live");
+        elGenModeText.textContent =
+          mode === "live"
+            ? "live · backend-driven"
+            : `experimental · ${(GENERATION_TOTAL_MS / 1000).toFixed(0)}s`;
+        paintGenStages(GENERATION_STAGES.map(() => "pending"));
+        elGenSubstep.textContent = "Starting…";
+        elGenElapsed.textContent = "0.0s elapsed";
+        elGenOverlay.classList.add("show");
+      }
+      function closeGenOverlay() {
+        elGenOverlay.classList.remove("show");
+      }
+
+      // Single in-flight controller; the cancel button delegates to whichever
+      // run is currently active.
+      let activeGenCancel = null;
+      elGenCancel.addEventListener("click", () => {
+        if (activeGenCancel) activeGenCancel();
+      });
+
+      // Run the overlay + backend fetch. Returns:
+      //   { data?, error?, cancelled? }
+      // The backend always runs in parallel with the UI animation; only the
+      // pacing of stage reveal differs between modes.
+      async function runGenerationOverlay({ prompt, qcRefs, mockPlan }) {
+        const mode = getGenMode();
+        openGenOverlay(mode);
+
+        const ac = new AbortController();
+        const states = GENERATION_STAGES.map(() => "pending");
+        let activeIdx = -1;
+        let substepIdx = 0;
+        let substepTimer = null;
+        let stageTimer = null;
+        let elapsedTimer = null;
+        const startedAt = performance.now();
+
+        let dataResolved = null;
+        let dataError = null;
+        let resolveOuter;
+        const outerPromise = new Promise((r) => (resolveOuter = r));
+
+        function tickElapsed() {
+          elGenElapsed.textContent = `${((performance.now() - startedAt) / 1000).toFixed(1)}s elapsed`;
+        }
+        elapsedTimer = setInterval(tickElapsed, 100);
+
+        function startSubstepCycle() {
+          if (substepTimer) clearInterval(substepTimer);
+          substepIdx = 0;
+          const tick = () => {
+            const stage = GENERATION_STAGES[activeIdx];
+            const list = mode === "live" ? LIVE_SUBSTEPS : (stage?.substeps || ["Working…"]);
+            setGenSubstep(list[substepIdx % list.length]);
+            substepIdx++;
+          };
+          tick();
+          substepTimer = setInterval(tick, 1500);
+        }
+
+        function cleanupTimers() {
+          if (stageTimer) clearTimeout(stageTimer);
+          if (substepTimer) clearInterval(substepTimer);
+          if (elapsedTimer) clearInterval(elapsedTimer);
+          stageTimer = substepTimer = elapsedTimer = null;
+        }
+
+        activeGenCancel = () => {
+          ac.abort();
+          cleanupTimers();
+          closeGenOverlay();
+          activeGenCancel = null;
+          resolveOuter({ cancelled: true });
+        };
+
+        // Data source — backend fetch in real path, instant promise in mock path.
+        // Mock path resolves quickly so live mode (which has no backend timing
+        // signal) still completes the overlay; experimental mode pacing is the
+        // same either way because it's purely client-side.
+        const fetchPromise = mockPlan
+          ? new Promise((r) => setTimeout(r, 600)).then(() => {
+              dataResolved = { plan: mockPlan, partialErrors: {} };
+            })
+          : fetch("/plan", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ prompt, qcReferences: qcRefs }),
+              signal: ac.signal,
+            })
+              .then(async (res) => {
+                const json = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(json?.error || `Request failed (${res.status})`);
+                return json;
+              })
+              .then(
+                (json) => {
+                  dataResolved = json;
+                },
+                (err) => {
+                  if (err?.name !== "AbortError") dataError = err;
+                },
+              );
+
+        function finalize() {
+          cleanupTimers();
+          closeGenOverlay();
+          activeGenCancel = null;
+          resolveOuter({ data: dataResolved, error: dataError });
+        }
+
+        if (mode === "experimental") {
+          // Fixed-timer schedule. Stage marks are independent of backend timing.
+          let i = 0;
+          const advance = () => {
+            // Resolve previous stage's mark.
+            if (activeIdx >= 0) {
+              states[activeIdx] = dataError ? "failed" : "done";
+            }
+            if (i >= GENERATION_STAGES.length) {
+              activeIdx = -1;
+              paintGenStages(states);
+              if (dataResolved || dataError) {
+                finalize();
+                return;
+              }
+              setGenSubstep("Finalizing plan…");
+              fetchPromise.then(finalize);
+              return;
+            }
+            activeIdx = i;
+            states[activeIdx] = "active";
+            paintGenStages(states);
+            startSubstepCycle();
+            const dur = GENERATION_STAGES[i].duration;
+            stageTimer = setTimeout(() => {
+              i++;
+              advance();
+            }, dur);
+          };
+          advance();
+        } else {
+          // Live mode: cycle the active stage at a generic cadence; reveal the
+          // moment the real backend resolves. No fake "done" ticks before then.
+          activeIdx = 0;
+          states[activeIdx] = "active";
+          paintGenStages(states);
+          startSubstepCycle();
+          const cycle = () => {
+            states[activeIdx] = "pending";
+            activeIdx = (activeIdx + 1) % GENERATION_STAGES.length;
+            states[activeIdx] = "active";
+            paintGenStages(states);
+            stageTimer = setTimeout(cycle, LIVE_STAGE_CADENCE_MS);
+          };
+          stageTimer = setTimeout(cycle, LIVE_STAGE_CADENCE_MS);
+          fetchPromise.then(() => {
+            // Backend done — mark all stages resolved.
+            for (let k = 0; k < states.length; k++) {
+              states[k] = dataError && k === activeIdx ? "failed" : "done";
+            }
+            paintGenStages(states);
+            finalize();
+          });
+        }
+
+        return outerPromise;
       }
 
       let planInFlight = false;
-      elGenerate.addEventListener("click", async () => {
-        if (planInFlight) return;
-        if (!state.lastPrompt) return;
+
+      // Shared "before generation" UI prep used by both buttons.
+      function beginPlanRun() {
         planInFlight = true;
         elPlanError.style.display = "none";
         elPlanError.textContent = "";
         elPlanNote.style.display = "none";
         elPlanNote.innerHTML = "";
         elPlanCard.style.display = "none";
+        elPlanMeta.style.display = "none";
+        elGenerate.disabled = true;
+        elSubmit.disabled = true;
+        elGenerateSpinner.style.display = "inline-block";
+        elGenerateChevron.style.display = "none";
+        elGenerateLabel.textContent = "Generating plan…";
+      }
+      function endPlanRun() {
+        planInFlight = false;
+        elGenerate.disabled = false;
+        elSubmit.disabled = wordCount(elPrompt.value) === 0 || wordCount(elPrompt.value) > MAX_WORDS;
+        elGenerateSpinner.style.display = "none";
+        elGenerateChevron.style.display = "inline";
+        elGenerateLabel.textContent = "Generate experiment plan";
+      }
 
-        setPlanLoading(true);
-        const stageTimer = rotatePlanStages();
+      elGenerate.addEventListener("click", async () => {
+        if (planInFlight) return;
+        if (!state.lastPrompt) return;
+
+        beginPlanRun();
         try {
-          const res = await fetch("/plan", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: state.lastPrompt, qcReferences: state.qcRefs }),
+          const result = await runGenerationOverlay({
+            prompt: state.lastPrompt,
+            qcRefs: state.qcRefs,
           });
-          const json = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(json?.error || `Request failed (${res.status})`);
 
+          if (result.cancelled) {
+            // Hypothesis is preserved automatically (state.lastPrompt + elPrompt.value untouched).
+            return;
+          }
+
+          if (result.error) {
+            elPlanError.style.display = "block";
+            elPlanError.textContent = result.error?.message || String(result.error);
+            return;
+          }
+
+          const json = result.data || {};
           state.plan = json.plan;
           renderPlan(json.plan);
 
@@ -1361,13 +2118,8 @@
               keys.map((k) => `<div><code>${esc(k)}</code>: ${esc(String(errs[k]))}</div>`).join("") +
               `</div>`;
           }
-        } catch (e) {
-          elPlanError.style.display = "block";
-          elPlanError.textContent = e?.message || String(e);
         } finally {
-          clearInterval(stageTimer);
-          setPlanLoading(false);
-          planInFlight = false;
+          endPlanRun();
         }
       });
     </script>

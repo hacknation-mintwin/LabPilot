@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">AI Scientist logo icon</title>
+  <desc id="desc">Minimal white line icon combining an AI robot, laboratory flask, experiment sliders, and a validation checkmark.</desc>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <!-- AI / science nodes -->
+    <circle cx="250" cy="64" r="14" stroke-width="8"/>
+    <circle cx="304" cy="53" r="16" stroke-width="8"/>
+    <circle cx="280" cy="92" r="18" stroke-width="8"/>
+    <path d="M280 110v17" stroke-width="10"/>
+
+    <!-- Robot head -->
+    <rect x="190" y="124" width="180" height="86" rx="38" stroke-width="12"/>
+    <rect x="218" y="148" width="124" height="38" rx="19" stroke-width="8"/>
+    <circle cx="248" cy="167" r="8" fill="#ffffff" stroke="none"/>
+    <circle cx="312" cy="167" r="8" fill="#ffffff" stroke="none"/>
+    <path d="M180 152v30" stroke-width="12"/>
+    <path d="M380 152v30" stroke-width="12"/>
+
+    <!-- Flask body -->
+    <path d="M243 225v48L164 408c-14 24 4 54 32 54h168c28 0 46-30 32-54l-79-135v-48" stroke-width="12"/>
+    <path d="M223 225h20" stroke-width="12"/>
+    <path d="M317 225h20" stroke-width="12"/>
+
+    <!-- Experiment validation mark -->
+    <path d="M236 352l42 42 86-88" stroke-width="20"/>
+
+    <!-- Bubbles inside flask -->
+    <circle cx="253" cy="402" r="11" stroke-width="8"/>
+    <circle cx="282" cy="344" r="10" stroke-width="8"/>
+    <circle cx="298" cy="314" r="9" stroke-width="8"/>
+
+    <!-- Experiment planning sliders -->
+    <path d="M72 284h148" stroke-width="12"/>
+    <circle cx="72" cy="284" r="14" stroke-width="10"/>
+    <circle cx="150" cy="284" r="14" stroke-width="10"/>
+    <path d="M92 328h110" stroke-width="12"/>
+    <circle cx="92" cy="328" r="14" stroke-width="10"/>
+    <path d="M72 372h95" stroke-width="12"/>
+    <circle cx="72" cy="372" r="14" stroke-width="10"/>
+  </g>
+</svg>

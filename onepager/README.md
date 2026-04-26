@@ -30,6 +30,9 @@ Edit `.env`:
 
 - `CONTACT_EMAIL` (recommended): used in `User-Agent` headers for all upstream calls
 - `S2_API_KEY` (optional but strongly recommended): Semantic Scholar API key to avoid shared unauthenticated throttling (HTTP 429) and improve reliability
+- `GEMINI_API_KEY` (required for `POST /plan`): Google AI Studio key used through the OpenAI-compatible Gemini endpoint
+- `GEMINI_BASE` (optional): defaults to `https://generativelanguage.googleapis.com/v1beta/openai/`
+- `PLAN_MODEL` / `FAST_MODEL` (optional): default to `gemini-2.5-flash`
 
 ## Run locally
 
